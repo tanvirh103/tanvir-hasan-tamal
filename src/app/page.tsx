@@ -226,6 +226,29 @@ export default function Home() {
                 environments.
               </p>
             </div>
+              <hr className="bg-[#81baff] rounded-full w-5 h-5 absolute left-1 -translate-x-1 mt-6" />
+            <div className="max-w-full md:w-[600px] lg:w-[700px] text-justify mt-5">
+              <p className="font-[500] text-[18px] lg:text-[20px] ml-4 ">
+                EraVend GmbH & Co. KG — Königsbrunn, Germany  
+              </p>
+              <p className="font-[500] text-[16px] ml-4 py-1">
+                {" "}
+                Full-Stack Developer (Remote)
+              </p>
+              <p className="font-[500] text-[16px] ml-4 py-1">
+                {" "}
+                - Building and maintaining features for a multi-tenant Employee Management System (EMS), enabling multiple companies to manage workforce operations from a single platform.
+              </p>
+              <p className="font-[500] text-[16px] ml-4 py-1">
+                - Developed core modules including Chat, Notifications, Email, Sales, and Finance — contributing to both frontend (Next.js) and backend (NestJS) layers.
+              </p>
+              <p className="font-[500] text-[16px] ml-4 py-1">
+                - Implemented real-time communication features, automated email workflows, and integrated sales and finance data flows between services.
+              </p>
+              <p className="font-[500] text-[16px] ml-4 py-1">
+                - Delivered UI enhancements and performed extensive bug fixing across critical modules, improving system stability and user experience.
+              </p>
+            </div>
           </div>
         </div>
         <div className="pt-6 lg:pt-2">
