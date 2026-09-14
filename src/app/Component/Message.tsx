@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 
 const messages = [
   "Hello",           
@@ -32,7 +32,7 @@ export default function RotatingMessage() {
     return () => clearInterval(interval);
   }, []);
 
-  const rotateVariants = {
+  const rotateVariants: Variants = {
     initial: { rotateX: 90, opacity: 0 },
     animate: {
       rotateX: 0,
