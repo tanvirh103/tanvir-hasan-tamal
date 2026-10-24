@@ -67,6 +67,7 @@ export interface Achievement {
 
 export interface VolunteerActivity {
   title: string;
+  organization?: string;
   date: string;
 }
 

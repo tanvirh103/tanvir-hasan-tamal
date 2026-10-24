@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve@latest out",
+    "start": "npx serve@14.2.6 out",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "next typegen && tsc --noEmit",

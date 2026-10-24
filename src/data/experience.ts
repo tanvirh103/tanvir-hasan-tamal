@@ -14,7 +14,15 @@ export const experiences: Experience[] = [
       "Built real-time communication with WebSockets and automated email workflows, integrating sales and finance data flows across microservices.",
       "Improved system stability through targeted UI enhancements and extensive bug resolution across critical modules.",
     ],
-    stack: ["Next.js", "NestJS", "TypeScript", "WebSockets", "Microservices","MongoDB","Monorepo"],
+    stack: [
+      "Next.js",
+      "NestJS",
+      "TypeScript",
+      "WebSockets",
+      "Microservices",
+      "MongoDB",
+      "Monorepo",
+    ],
   },
   {
     company: "Techy's UK",
