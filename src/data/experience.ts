@@ -3,7 +3,7 @@ import type { Experience } from "@/types";
 export const experiences: Experience[] = [
   {
     company: "EraVend GmbH & Co. KG",
-    role: "Full-Stack Developer",
+    role: "Full-Stack Engineer",
     location: "Königsbrunn, Germany",
     employmentType: "Remote",
     period: "Jan 2026 — Present",
@@ -14,7 +14,7 @@ export const experiences: Experience[] = [
       "Built real-time communication with WebSockets and automated email workflows, integrating sales and finance data flows across microservices.",
       "Improved system stability through targeted UI enhancements and extensive bug resolution across critical modules.",
     ],
-    stack: ["Next.js", "NestJS", "TypeScript", "WebSockets", "Microservices"],
+    stack: ["Next.js", "NestJS", "TypeScript", "WebSockets", "Microservices","MongoDB","Monorepo"],
   },
   {
     company: "Techy's UK",
