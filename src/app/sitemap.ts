@@ -1,32 +1,22 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+
+import { siteConfig } from "@/lib/site";
+
 export const dynamic = "force-static";
-export const BASE_URL = "https://tanvirh103.github.io/tanvir-hasan-tamal";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: BASE_URL,
+      url: `${siteConfig.url}/`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 1.0,
+      priority: 1,
     },
     {
-      url: `${BASE_URL}/about`,
+      url: `${siteConfig.url}/contact/`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/projects`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+      changeFrequency: "yearly",
+      priority: 0.6,
     },
   ];
 }
