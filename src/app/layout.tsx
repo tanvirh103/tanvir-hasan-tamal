@@ -1,87 +1,88 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
+import type { Metadata, Viewport } from "next";
+import { Cal_Sans, Inter } from "next/font/google";
+
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { basePath, siteConfig, withBasePath } from "@/lib/site";
+import { themeInitScript } from "@/lib/theme";
+
 import "./globals.css";
-import Navbar from "./Component/Navbar";
-const gilroy = localFont({
-  src: [
-    {
-      path: "./fonts/InterVariable.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/CalSans-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-  ],
-  variable: "--font-gilroy",
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
 });
 
+const calSans = Cal_Sans({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-cal-sans",
+  // Cal Sans ships no metric overrides, so rely on the CSS fallback stack instead.
+  adjustFontFallback: false,
+});
+
+const ogImageUrl = `${siteConfig.url}${siteConfig.ogImage}`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(`${siteConfig.url}/`),
   title: {
-    default: "Tanvir Hasan Tamal – Full Stack Developer & Software Engineer",
-    template: "%s | Tanvir Hasan Tamal",
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "Portfolio of Tanvir Hasan Tamal, a Full Stack Developer and Software Engineer specializing in Next.js, NestJS, Express.js, Tailwind CSS, and modern JavaScript/TypeScript. Explore projects, experience, and expertise in building scalable, high-performance web applications.",
-  keywords: [
-    "Tanvir Hasan Tamal",
-    "Tanvir Hasan",
-    "Tamal",
-    "tanvirh103",
-    "Tanvir Tamal",
-    "Tanvir Hasan Tamal Portfolio",
-    "Full Stack Engineer",
-    "Full Stack Developer",
-    "Software Engineer",
-    "Next.js Developer",
-    "NestJS Developer",
-    "Express.js Developer",
-    "Tailwind CSS Developer",
-    "JavaScript Developer",
-    "TypeScript Developer",
-    "MERN Developer",
-    "Web Developer Portfolio",
-    "Backend Developer",
-    "Frontend Developer",
-    "React Developer",
-    "Node.js Developer",
-    "Modern Web Development",
-    "API Developer",
-    "GitHub Portfolio",
-    "Bangladeshi Developer",
-  ],
-  metadataBase: new URL("https://tanvirh103.github.io/tanvir-hasan-tamal"),
-  authors: [{ name: "Tanvir Hasan Tamal" }],
-  creator: "Tanvir Hasan Tamal",
-  publisher: "Tanvir Hasan Tamal",
+  description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  alternates: { canonical: `${siteConfig.url}/` },
   openGraph: {
-    title: "Tanvir Hasan Tamal – Full Stack Developer & Software Engineer",
-    description:
-      "Explore the portfolio of Tanvir Hasan Tamal, expert in Next.js, NestJS, Express.js, Tailwind CSS, and scalable full stack web development.",
-    url: "https://tanvirh103.github.io/tanvir-hasan-tamal",
-    siteName: "Tanvir Hasan Tamal – Portfolio",
     type: "website",
+    locale: siteConfig.locale,
+    url: `${siteConfig.url}/`,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [{ url: ogImageUrl, width: 1200, height: 630, alt: siteConfig.title }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tanvir Hasan Tamal – Full Stack Developer",
-    description:
-      "Full Stack Developer skilled in Next.js, NestJS, Express.js, Tailwind CSS and modern JS/TS.",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [ogImageUrl],
   },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8fafb" },
+    { media: "(prefers-color-scheme: dark)", color: "#07090c" },
+  ],
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${gilroy.className}`}>
-        <Navbar />
-        {children}
+    // The theme script mutates the class before hydration, hence the warning suppression.
+    <html lang="en" className={`${inter.variable} ${calSans.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Next.js omits favicon.ico when a basePath is set; Safari needs it (no SVG favicons). */}
+        {basePath && <link rel="icon" href={withBasePath("/favicon.ico")} sizes="48x48" />}
+      </head>
+      <body>
+        <a
+          href="#main"
+          className="sr-only z-[60] rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        >
+          Skip to content
+        </a>
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );

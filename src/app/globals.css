@@ -1,29 +1,172 @@
 @import "tailwindcss";
 
-/* globals.css */
-/* @tailwind base;
-@tailwind components; */
-@tailwind utilities;
+/* Class-based dark mode: `.dark` on <html> is set before paint by the theme script. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-body {
-  background-color: #000000;
-  color: #f2f6fa;
-  text-shadow:#909091;
+/* ---------- Design tokens ---------- */
+:root {
+  --background: #f8fafb;
+  --surface: #ffffff;
+  --surface-muted: #f1f4f6;
+  --foreground: #0b1015;
+  --muted: #55606b;
+  --border: rgb(15 23 32 / 0.09);
+  --border-strong: rgb(15 23 32 / 0.16);
+  --accent: #0d9488;
+  --accent-2: #0284c7;
+  --accent-foreground: #ffffff;
+  --accent-soft: rgb(13 148 136 / 0.1);
+  --glow: rgb(13 148 136 / 0.18);
+  --grid-line: rgb(15 23 32 / 0.045);
+  color-scheme: light;
 }
 
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: #71717a5c;
+.dark {
+  --background: #07090c;
+  --surface: #0d1117;
+  --surface-muted: #141a21;
+  --foreground: #eef2f5;
+  --muted: #9aa5b1;
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --accent: #5eead4;
+  --accent-2: #38bdf8;
+  --accent-foreground: #04201c;
+  --accent-soft: rgb(94 234 212 / 0.1);
+  --glow: rgb(45 212 191 / 0.16);
+  --grid-line: rgb(255 255 255 / 0.035);
+  color-scheme: dark;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  background-color: #71717a5c;
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cal-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-flip-in: flip-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #71717a5c;
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
 }
 
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 
+@keyframes flip-in {
+  from {
+    opacity: 0;
+    transform: rotateX(80deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  :focus-visible {
+    @apply rounded-sm outline-2 outline-offset-2 outline-accent;
+  }
+
+  /* Theme switches are animated by a single View Transition crossfade (see lib/theme.ts),
+     so per-element transitions are paused while the theme class flips. */
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: none !important;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 220ms;
+  animation-timing-function: ease-out;
+}
+
+/* ---------- Utilities ---------- */
+@utility text-gradient {
+  @apply bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+@utility mask-fade-b {
+  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+}
+
+/* Scroll-driven reveal: progressive enhancement, zero JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
