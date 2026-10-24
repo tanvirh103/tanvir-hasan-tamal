@@ -20,7 +20,6 @@ export function Hero() {
     >
       {/* Decorative background */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-grid mask-fade-b" />
         <div className="absolute -top-40 left-1/2 h-[36rem] w-[min(64rem,140vw)] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
       </div>
 

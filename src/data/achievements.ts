@@ -22,10 +22,22 @@ export const achievements: Achievement[] = [
 ];
 
 export const volunteering: VolunteerActivity[] = [
-  { title: "AIUB Cyber Gaming Fest", date: "2022" },
-  { title: "President Scout Award National Evaluation Camp", date: "Apr 2018" },
-  { title: "JOTA-JOTI Jamboree", date: "Oct 2016" },
-  { title: "Patrol Leader Training Camp", date: "2016" },
-  { title: "9th Bangladesh & 1st SAANSO Scout Jamboree", date: "Apr 2014" },
-  { title: "10th National Rover Moot & 5th National COMDECA", date: "Jan — Feb 2013" },
+  { title: "AIUB Cyber Gaming Fest", organization: "AIUB", date: "2022" },
+  {
+    title: "President Scout Award National Evaluation Camp",
+    organization: "Bangladesh Scouts",
+    date: "Apr 2018",
+  },
+  { title: "JOTA-JOTI Jamboree", organization: "Bangladesh Scouts", date: "Oct 2016" },
+  { title: "Patrol Leader Training Camp", organization: "Bangladesh Scouts", date: "2016" },
+  {
+    title: "9th Bangladesh & 1st SAANSO Scout Jamboree",
+    organization: "Bangladesh Scouts",
+    date: "Apr 2014",
+  },
+  {
+    title: "10th National Rover Moot & 5th National COMDECA",
+    organization: "Bangladesh Scouts",
+    date: "Jan — Feb 2013",
+  },
 ];
