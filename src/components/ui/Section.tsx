@@ -1,12 +1,10 @@
 import type { ReactNode } from "react";
 
-import { navItems } from "@/data/profile";
 import { cn } from "@/lib/cn";
-
-import { Container } from "./Container";
 
 interface SectionProps {
   id: string;
+  /** Short label rendered as a code comment, e.g. "about" becomes `// about`. */
   eyebrow: string;
   title: ReactNode;
   description?: string;
@@ -16,32 +14,33 @@ interface SectionProps {
 
 export function Section({ id, eyebrow, title, description, className, children }: SectionProps) {
   const headingId = `${id}-heading`;
-  const position = navItems.findIndex((item) => item.id === id);
-  const number = position >= 0 ? String(position + 1).padStart(2, "0") : null;
 
   return (
-    <section id={id} aria-labelledby={headingId} className={cn("py-24 sm:py-32", className)}>
-      <Container>
-        <header className="reveal mb-12 grid gap-6 sm:mb-16 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div className="max-w-3xl">
-            <p className="mb-5 flex items-center gap-3 font-mono text-xs font-medium tracking-[0.18em] text-muted uppercase">
-              {number && <span className="text-accent">{number}</span>}
-              <span aria-hidden="true" className="h-px w-8 bg-border-strong" />
-              {eyebrow}
-            </p>
-            <h2
-              id={headingId}
-              className="text-4xl font-semibold tracking-[-0.035em] sm:text-5xl lg:text-6xl"
-            >
-              {title}
-            </h2>
-          </div>
+    <section
+      id={id}
+      aria-labelledby={headingId}
+      className={cn("relative px-4 py-24 sm:px-6 sm:py-32 lg:px-10", className)}
+    >
+      <div className="mx-auto max-w-6xl">
+        <header className="mb-14 max-w-3xl sm:mb-16">
+          <p className="reveal font-mono text-sm text-accent">
+            <span className="text-muted">{"// "}</span>
+            {eyebrow}
+          </p>
+          <h2
+            id={headingId}
+            className="reveal mt-4 text-4xl font-bold tracking-[-0.03em] sm:text-5xl lg:text-6xl"
+          >
+            {title}
+          </h2>
           {description && (
-            <p className="max-w-sm text-base text-muted lg:text-right">{description}</p>
+            <p className="reveal mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+              {description}
+            </p>
           )}
         </header>
         {children}
-      </Container>
+      </div>
     </section>
   );
 }

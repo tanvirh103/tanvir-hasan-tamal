@@ -4,21 +4,26 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { socialLinks } from "@/data/profile";
 import { projects } from "@/data/projects";
-import { cn } from "@/lib/cn";
 import type { Project } from "@/types";
 
 const githubProfile = socialLinks.find((link) => link.platform === "github")?.href;
 
+const slug = (title: string) =>
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
 function ProjectLinks({ project }: { project: Project }) {
   return (
-    <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-5">
+    <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
       {project.links.map(({ label, href }) => (
         <a
           key={href}
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="group/link inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-accent"
+          className="group/link inline-flex items-center gap-1.5 rounded-sm font-mono text-sm text-foreground transition-colors hover:text-accent"
         >
           <GithubIcon className="size-4" />
           {label}
@@ -42,46 +47,48 @@ function StackList({ stack }: { stack: string[] }) {
   );
 }
 
-function FeaturedCard({ project, index }: { project: Project; index: number }) {
+/** Featured project: rotating neon border, 3D tilt and a terminal-style path header. */
+function FeaturedCard({ project }: { project: Project }) {
   return (
-    <article className="reveal group flex h-full card-hover flex-col overflow-hidden card">
-      {/* Decorative cover: a soft gradient mesh with the project number. */}
-      <div
-        aria-hidden="true"
-        className={cn(
-          "relative h-44 overflow-hidden border-b border-border sm:h-56",
-          index % 2 === 0
-            ? "bg-[radial-gradient(120%_120%_at_0%_0%,var(--accent-soft),transparent_60%),radial-gradient(80%_100%_at_100%_100%,color-mix(in_oklch,var(--accent-2)_18%,transparent),transparent_70%)]"
-            : "bg-[radial-gradient(120%_120%_at_100%_0%,var(--accent-soft),transparent_60%),radial-gradient(80%_100%_at_0%_100%,color-mix(in_oklch,var(--accent-2)_18%,transparent),transparent_70%)]",
-        )}
-      >
-        <div className="absolute inset-0 bg-dots mask-fade-b opacity-70" />
-        <span className="absolute right-6 bottom-2 font-serif text-[7rem] leading-none text-foreground/10 italic transition-transform duration-500 group-hover:-translate-y-1 sm:text-[9rem]">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        {project.badge && (
-          <Badge variant="accent" className="absolute top-5 left-5 bg-surface/80 backdrop-blur">
-            <TrophyIcon className="size-3.5" />
-            {project.badge}
-          </Badge>
-        )}
-      </div>
+    <div data-tilt className="reveal h-full tilt">
+      <div className="neon-frame h-full shadow-[0_24px_70px_-30px_var(--glow)]">
+        <article className="flex h-full flex-col rounded-[1.3rem] bg-surface p-6 sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="font-mono text-xs text-muted">
+              <span className="text-accent">~/projects/</span>
+              {slug(project.title)}
+            </p>
+            {project.badge && (
+              <Badge variant="accent">
+                <TrophyIcon className="size-3.5" />
+                {project.badge}
+              </Badge>
+            )}
+          </div>
 
-      <div className="flex flex-1 flex-col p-6 sm:p-8">
-        <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">{project.title}</h3>
-        <p className="mt-3 flex-1 leading-relaxed text-muted">{project.summary}</p>
-        <StackList stack={project.stack} />
-        <ProjectLinks project={project} />
+          <h3 className="mt-6 text-2xl font-bold tracking-tight sm:text-3xl">{project.title}</h3>
+          <p className="mt-3 flex-1 leading-relaxed text-muted">{project.summary}</p>
+          <StackList stack={project.stack} />
+          <ProjectLinks project={project} />
+        </article>
       </div>
-    </article>
+    </div>
   );
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="reveal flex h-full card-hover flex-col card p-6">
-      <span className="font-mono text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
-      <h3 className="mt-4 text-xl font-semibold tracking-tight">{project.title}</h3>
+    <article className="reveal glass-card flex h-full flex-col p-6 hover:-translate-y-1">
+      <div className="flex items-center justify-between">
+        <span
+          aria-hidden="true"
+          className="inline-flex size-11 items-center justify-center rounded-xl border border-accent-2/30 bg-accent-2/10 font-mono text-sm font-semibold text-accent-2"
+        >
+          {"</>"}
+        </span>
+        <span className="font-mono text-xs text-muted">{slug(project.title)}</span>
+      </div>
+      <h3 className="mt-5 text-xl font-bold tracking-tight">{project.title}</h3>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{project.summary}</p>
       <StackList stack={project.stack} />
       <ProjectLinks project={project} />
@@ -96,26 +103,26 @@ export function Projects() {
   return (
     <Section
       id="projects"
-      eyebrow="Selected work"
+      eyebrow="projects"
       title={
         <>
-          Projects I&apos;m <span className="serif-accent">proud</span> of
+          Projects I&apos;m <span className="text-neon">proud</span> of
         </>
       }
       description="From award-winning blockchain research to full-stack web platforms."
     >
-      <ul className="grid gap-3 lg:grid-cols-2">
-        {featured.map((project, index) => (
+      <ul className="grid gap-6 lg:grid-cols-2">
+        {featured.map((project) => (
           <li key={project.title}>
-            <FeaturedCard project={project} index={index} />
+            <FeaturedCard project={project} />
           </li>
         ))}
       </ul>
 
-      <ul className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {others.map((project, index) => (
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {others.map((project) => (
           <li key={project.title}>
-            <ProjectCard project={project} index={featured.length + index} />
+            <ProjectCard project={project} />
           </li>
         ))}
       </ul>

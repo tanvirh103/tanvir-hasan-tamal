@@ -13,18 +13,18 @@ const contactDetails = [
   { icon: MapPinIcon, label: "Location", value: `${profile.location} · Remote`, href: undefined },
 ];
 
-/** Email, phone and location as a list of tiles, shared by the home page and the contact page. */
+/** Email, phone and location as glass tiles, shared by the home page and the contact page. */
 export function ContactDetails({ className }: { className?: string }) {
   return (
     <ul className={cn("grid gap-3", className)}>
       {contactDetails.map(({ icon: Icon, label, value, href }) => {
         const content = (
           <>
-            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-accent-soft text-accent">
+            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl border border-accent/30 bg-accent-soft text-accent">
               <Icon className="size-5" />
             </span>
             <span className="min-w-0 flex-1 text-left">
-              <span className="block text-xs text-muted">{label}</span>
+              <span className="block font-mono text-xs text-muted">{label}</span>
               <span className="block truncate text-sm font-medium">{value}</span>
             </span>
             {href && (
@@ -32,16 +32,15 @@ export function ContactDetails({ className }: { className?: string }) {
             )}
           </>
         );
-        const className =
-          "group flex items-center gap-3 rounded-2xl border border-border bg-background p-4 transition-colors";
+        const rowClass = "glass-card group flex items-center gap-3 p-4";
         return (
           <li key={label}>
             {href ? (
-              <a href={href} className={cn(className, "hover:border-accent/40")}>
+              <a href={href} className={rowClass}>
                 {content}
               </a>
             ) : (
-              <div className={className}>{content}</div>
+              <div className={rowClass}>{content}</div>
             )}
           </li>
         );

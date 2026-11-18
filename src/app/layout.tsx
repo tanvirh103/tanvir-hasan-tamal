@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 
+import { InteractiveEffects } from "@/components/effects/InteractiveEffects";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { basePath, siteConfig, withBasePath } from "@/lib/site";
 import { themeInitScript } from "@/lib/theme";
 
@@ -18,16 +20,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-geist-mono",
-  // Only used for small labels; skip preloading so it never competes with the main text font.
-  preload: false,
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-  display: "swap",
-  variable: "--font-instrument-serif",
 });
 
 const ogImageUrl = `${siteConfig.url}${siteConfig.ogImage}`;
@@ -86,19 +78,15 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f9f9fc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0c0d14" },
+    { media: "(prefers-color-scheme: light)", color: "#f9fafd" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0d17" },
   ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     // The theme script mutates the class before hydration, hence the warning suppression.
-    <html
-      lang="en"
-      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         {process.env.NODE_ENV === "production" && (
           <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
@@ -111,13 +99,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <a
           href="#main"
-          className="sr-only z-[60] rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          className="sr-only z-[60] rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
           Skip to content
         </a>
+        <ScrollProgress />
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <InteractiveEffects />
       </body>
     </html>
   );

@@ -27,7 +27,7 @@ function validate(values: Record<FieldName, string>): FieldErrors {
 }
 
 const inputClassName =
-  "w-full rounded-2xl border border-border bg-background px-4 py-3.5 text-base text-foreground placeholder:text-muted/70 transition-colors outline-none hover:border-border-strong focus:border-accent focus:ring-4 focus:ring-accent/15 aria-[invalid=true]:border-red-500 sm:text-sm";
+  "w-full rounded-xl border border-border bg-background/60 px-4 py-3.5 text-base text-foreground placeholder:text-muted/70 transition-[border-color,box-shadow] outline-none hover:border-border-strong focus:border-accent focus:shadow-[0_0_0_4px_var(--accent-soft),0_0_24px_-8px_var(--glow)] aria-[invalid=true]:border-red-500 sm:text-sm";
 
 interface FieldProps {
   name: FieldName;
@@ -49,7 +49,7 @@ function Field({ name, label, error, optional, children }: FieldProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm font-medium">
+      <label htmlFor={id} className="font-mono text-xs tracking-[0.08em] text-muted uppercase">
         {label}
         {optional && <span className="ml-1 font-normal text-muted">(optional)</span>}
       </label>
@@ -139,7 +139,7 @@ export function ContactForm() {
   if (status === "success") {
     return (
       <div role="status" className="flex flex-col items-center py-10 text-center">
-        <span className="inline-flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
+        <span className="inline-flex size-14 items-center justify-center rounded-md bg-accent-soft text-accent">
           <svg
             viewBox="0 0 24 24"
             className="size-7"
@@ -151,7 +151,7 @@ export function ContactForm() {
             <path d="m5 12 5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
-        <h2 className="font-display mt-5 text-2xl">Message sent!</h2>
+        <h2 className="mt-5 text-2xl font-semibold tracking-tight">Message sent</h2>
         <p className="mt-2 max-w-sm text-muted">
           Thanks for reaching out. I&apos;ll get back to you as soon as possible.
         </p>
@@ -224,7 +224,7 @@ export function ContactForm() {
 
       <div aria-live="polite">
         {status === "error" && (
-          <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+          <p className="rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
             Sorry, your message couldn&apos;t be sent. Please try again, or email me directly at{" "}
             <a
               href={`mailto:${profile.email}`}

@@ -1,50 +1,28 @@
-import Link from "next/link";
-
 import { ArrowUpIcon } from "@/components/icons";
-import { Container } from "@/components/ui/Container";
 import { SocialLinks } from "@/components/ui/SocialLinks";
-import { navItems, profile } from "@/data/profile";
+import { profile } from "@/data/profile";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border">
-      <Container className="py-14">
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-sm">
-            <p className="text-2xl font-semibold tracking-tight">{profile.name}</p>
-            <p className="mt-2 text-sm text-muted">{profile.role}</p>
-            <SocialLinks className="mt-6" />
-          </div>
-
-          <nav aria-label="Footer">
-            <ul className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm">
-              {navItems.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={item.href ?? `/#${item.id}`}
-                    className="text-muted transition-colors hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+    <footer className="relative border-t border-border px-4 sm:px-6 lg:px-10">
+      <div className="mx-auto flex max-w-6xl flex-col-reverse items-start gap-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3">
+          <p className="font-mono">
+            <span className="text-accent">©</span> {year} {profile.name}
+            <span className="text-muted/70"> · built with Next.js</span>
+          </p>
+          <SocialLinks />
         </div>
-
-        <div className="mt-12 flex flex-col-reverse items-start gap-4 border-t border-border pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {profile.name}.</p>
-          <a
-            href="#top"
-            className="inline-flex items-center gap-2 font-medium transition-colors hover:text-accent"
-          >
-            Back to top
-            <ArrowUpIcon className="size-4" />
-          </a>
-        </div>
-      </Container>
+        <a
+          href="#top"
+          className="group inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 font-medium text-foreground transition-colors hover:border-accent/50 hover:text-accent"
+        >
+          Back to top
+          <ArrowUpIcon className="size-4 transition-transform group-hover:-translate-y-0.5" />
+        </a>
+      </div>
     </footer>
   );
 }

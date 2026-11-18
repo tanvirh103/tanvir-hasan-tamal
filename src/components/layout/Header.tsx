@@ -12,7 +12,7 @@ import type { NavItem } from "@/types";
 
 import { ThemeToggle } from "./ThemeToggle";
 
-/** Tracks which section is currently in view to highlight its nav link. */
+/** Tracks which section is in the middle of the viewport so its nav link can be highlighted. */
 function useActiveSection(ids: string[], pathname: string): string | null {
   const [active, setActive] = useState<string | null>(null);
 
@@ -30,19 +30,24 @@ function useActiveSection(ids: string[], pathname: string): string | null {
       if (element) observer.observe(element);
     }
     return () => observer.disconnect();
-    // Re-observe after client-side navigation, since the sections change per page.
   }, [ids, pathname]);
 
   return active;
 }
 
-// The hero ("top") is observed too, so no link is highlighted while it is in view.
 const sectionIds = ["top", ...navItems.map((item) => item.id)];
 
 const normalize = (path: string) => path.replace(/\/+$/, "") || "/";
 
 const navHref = ({ id, href }: NavItem): string => href ?? `/#${id}`;
 
+const initials = profile.name
+  .split(" ")
+  .map((part) => part[0])
+  .join("")
+  .slice(0, 2);
+
+/** Floating glass navigation bar that gains a surface once the page scrolls. */
 export function Header() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = normalize(usePathname());
@@ -60,11 +65,9 @@ export function Header() {
     };
     const desktop = window.matchMedia("(min-width: 1024px)");
     const onChange = () => desktop.matches && setMenuOpen(false);
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
     desktop.addEventListener("change", onChange);
     return () => {
-      document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
       desktop.removeEventListener("change", onChange);
     };
@@ -76,36 +79,37 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
       <div
         className={cn(
-          "mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-full border header-glass pr-2 pl-2 shadow-card sm:h-16 sm:pl-3",
-          !isMenuOpen && "header-scroll",
+          "mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-2xl border border-border bg-surface/70 px-2 shadow-[0_10px_40px_-20px_var(--glow)] backdrop-blur-xl sm:h-16 sm:px-3",
+          !isMenuOpen && "header-bar",
         )}
       >
         <Link
           href="/"
           onClick={closeMenu}
-          className="flex items-center gap-2.5 rounded-full"
-          aria-label={`${profile.name} — home`}
+          aria-label={`${profile.name}, home`}
+          className="group flex items-center gap-2.5 rounded-xl"
         >
-          <span className="flex size-10 items-center justify-center rounded-full bg-foreground text-sm font-semibold tracking-tight text-background">
-            TH
+          <span className="flex size-10 items-center justify-center rounded-xl border border-accent/40 bg-accent-soft font-mono text-sm font-semibold text-accent shadow-[0_0_18px_-4px_var(--glow)] transition-shadow group-hover:shadow-[0_0_24px_-2px_var(--glow)]">
+            {initials}
           </span>
-          <span className="hidden text-[0.95rem] font-semibold tracking-tight sm:block">
-            {profile.name}
+          <span className="hidden font-mono text-sm font-medium sm:block">
+            <span className="text-accent">~/</span>
+            {profile.firstName.toLowerCase()}
           </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center gap-0.5">
+          <ul className="flex items-center gap-1">
             {navItems.map((item) => (
               <li key={item.id}>
                 <Link
                   href={navHref(item)}
                   aria-current={isActive(item) ? "true" : undefined}
                   className={cn(
-                    "rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                    "relative rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     isActive(item)
-                      ? "bg-foreground/[0.06] text-foreground dark:bg-white/10"
-                      : "text-muted hover:text-foreground",
+                      ? "bg-accent-soft text-accent"
+                      : "text-muted hover:bg-surface-muted hover:text-foreground",
                   )}
                 >
                   {item.label}
@@ -121,7 +125,7 @@ export function Header() {
             href={withBasePath(siteConfig.resume)}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden h-10 items-center gap-2 rounded-full bg-foreground px-4 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground sm:inline-flex"
+            className="hidden h-10 btn-neon items-center gap-2 rounded-xl px-4 text-sm font-semibold sm:inline-flex"
           >
             <DownloadIcon className="size-4" />
             Resume
@@ -132,7 +136,7 @@ export function Header() {
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface lg:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-xl border border-border bg-surface transition-colors hover:border-accent/50 lg:hidden"
           >
             {isMenuOpen ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
           </button>
@@ -142,7 +146,7 @@ export function Header() {
       <div
         id="mobile-menu"
         hidden={!isMenuOpen}
-        className="mx-auto mt-2 max-h-[calc(100dvh-6rem)] max-w-6xl animate-fade-up overflow-y-auto rounded-3xl border header-glass p-3 shadow-card [animation-duration:0.35s] lg:hidden"
+        className="fade-up mx-auto mt-2 max-w-6xl rounded-2xl border border-border bg-surface/95 p-2 shadow-[0_20px_50px_-20px_var(--glow)] backdrop-blur-xl lg:hidden"
       >
         <nav aria-label="Mobile">
           <ul className="flex flex-col">
@@ -152,10 +156,11 @@ export function Header() {
                   href={navHref(item)}
                   onClick={closeMenu}
                   className={cn(
-                    "flex items-center rounded-2xl px-4 py-3.5 text-lg font-medium transition-colors hover:bg-surface-muted",
+                    "flex items-center gap-3 rounded-xl px-4 py-3.5 text-base font-medium transition-colors hover:bg-surface-muted",
                     isActive(item) ? "text-accent" : "text-foreground",
                   )}
                 >
+                  <span className="font-mono text-xs text-accent">#</span>
                   {item.label}
                 </Link>
               </li>
@@ -166,10 +171,10 @@ export function Header() {
           href={withBasePath(siteConfig.resume)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground text-sm font-medium text-background"
+          className="mt-2 inline-flex h-12 w-full btn-neon items-center justify-center gap-2 rounded-xl text-sm font-semibold"
         >
           <DownloadIcon className="size-4" />
-          Download Resume
+          Download resume
         </a>
       </div>
     </header>

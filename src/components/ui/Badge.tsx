@@ -10,15 +10,16 @@ interface BadgeProps {
 
 const variants = {
   default: "border-transparent bg-surface-muted text-muted",
-  accent: "border-accent/25 bg-accent-soft text-accent",
-  outline: "border-border bg-transparent text-muted",
+  accent: "border-accent/35 bg-accent-soft text-accent shadow-[0_0_14px_-6px_var(--glow)]",
+  outline: "border-border bg-surface-muted/50 text-muted",
 } as const;
 
+/** Small mono label for tech stacks and status. */
 export function Badge({ children, variant = "default", className }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 font-mono text-xs whitespace-nowrap",
         variants[variant],
         className,
       )}
