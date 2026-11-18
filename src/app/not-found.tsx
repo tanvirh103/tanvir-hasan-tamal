@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { ArrowRightIcon } from "@/components/icons";
+import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
@@ -10,18 +10,21 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <section className="flex min-h-[80dvh] items-center pt-16">
+    <section className="relative isolate flex min-h-[85dvh] items-center overflow-hidden pt-20">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-dots mask-radial"
+      />
       <Container className="text-center">
-        <p className="text-gradient font-display text-7xl sm:text-9xl">404</p>
-        <h1 className="mt-4 font-display text-2xl sm:text-3xl">This page doesn&apos;t exist</h1>
+        <p className="serif-accent text-[8rem] leading-none sm:text-[12rem]">404</p>
+        <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+          This page doesn&apos;t exist
+        </h1>
         <p className="mt-3 text-muted">The link may be broken, or the page may have moved.</p>
-        <Link
-          href="/"
-          className="mt-8 inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
-        >
+        <ButtonLink href="/" className="mt-10">
           Back to home
-          <ArrowRightIcon className="size-4" />
-        </Link>
+          <ArrowRightIcon />
+        </ButtonLink>
       </Container>
     </section>
   );

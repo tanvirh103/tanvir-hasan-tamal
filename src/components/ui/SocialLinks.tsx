@@ -19,7 +19,7 @@ export function SocialLinks({ className, itemClassName }: SocialLinksProps) {
               aria-label={label}
               title={label}
               className={cn(
-                "inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:border-accent hover:text-accent",
+                "inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface/70 text-muted transition-[color,border-color,translate] duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent",
                 itemClassName,
               )}
               {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}

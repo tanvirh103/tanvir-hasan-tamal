@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { navItems } from "@/data/profile";
 import { cn } from "@/lib/cn";
 
 import { Container } from "./Container";
@@ -15,22 +16,28 @@ interface SectionProps {
 
 export function Section({ id, eyebrow, title, description, className, children }: SectionProps) {
   const headingId = `${id}-heading`;
+  const position = navItems.findIndex((item) => item.id === id);
+  const number = position >= 0 ? String(position + 1).padStart(2, "0") : null;
 
   return (
-    <section id={id} aria-labelledby={headingId} className={cn("py-20 sm:py-28", className)}>
+    <section id={id} aria-labelledby={headingId} className={cn("py-24 sm:py-32", className)}>
       <Container>
-        <header className="reveal mb-12 max-w-2xl sm:mb-16">
-          <p className="mb-3 font-mono text-xs font-medium tracking-[0.2em] text-accent uppercase">
-            {eyebrow}
-          </p>
-          <h2
-            id={headingId}
-            className="font-display text-3xl tracking-tight text-balance sm:text-4xl lg:text-5xl"
-          >
-            {title}
-          </h2>
+        <header className="reveal mb-12 grid gap-6 sm:mb-16 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div className="max-w-3xl">
+            <p className="mb-5 flex items-center gap-3 font-mono text-xs font-medium tracking-[0.18em] text-muted uppercase">
+              {number && <span className="text-accent">{number}</span>}
+              <span aria-hidden="true" className="h-px w-8 bg-border-strong" />
+              {eyebrow}
+            </p>
+            <h2
+              id={headingId}
+              className="text-4xl font-semibold tracking-[-0.035em] sm:text-5xl lg:text-6xl"
+            >
+              {title}
+            </h2>
+          </div>
           {description && (
-            <p className="mt-4 text-base text-pretty text-muted sm:text-lg">{description}</p>
+            <p className="max-w-sm text-base text-muted lg:text-right">{description}</p>
           )}
         </header>
         {children}

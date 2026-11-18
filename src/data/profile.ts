@@ -38,7 +38,6 @@ export const stats: Stat[] = [
   { value: "3", label: "Companies" },
   { value: "30+", label: "Modules shipped" },
   { value: "10+", label: "Projects built" },
-  { value: "1st", label: "AIUB CS Fest 2024" },
 ];
 
 export const socialLinks: SocialLink[] = [

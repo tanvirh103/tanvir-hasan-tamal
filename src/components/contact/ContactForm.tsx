@@ -27,7 +27,7 @@ function validate(values: Record<FieldName, string>): FieldErrors {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted/70 transition-colors outline-none hover:border-border-strong focus:border-accent focus:ring-4 focus:ring-accent/15 aria-[invalid=true]:border-red-500 sm:text-sm";
+  "w-full rounded-2xl border border-border bg-background px-4 py-3.5 text-base text-foreground placeholder:text-muted/70 transition-colors outline-none hover:border-border-strong focus:border-accent focus:ring-4 focus:ring-accent/15 aria-[invalid=true]:border-red-500 sm:text-sm";
 
 interface FieldProps {
   name: FieldName;
@@ -151,7 +151,7 @@ export function ContactForm() {
             <path d="m5 12 5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
-        <h2 className="mt-5 font-display text-2xl">Message sent!</h2>
+        <h2 className="font-display mt-5 text-2xl">Message sent!</h2>
         <p className="mt-2 max-w-sm text-muted">
           Thanks for reaching out. I&apos;ll get back to you as soon as possible.
         </p>

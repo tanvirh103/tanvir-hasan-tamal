@@ -11,45 +11,50 @@ import { profile, stats } from "@/data/profile";
 import { coreStack } from "@/data/skills";
 import { siteConfig, withBasePath } from "@/lib/site";
 
+const nameParts = profile.name.split(" ");
+const lastName = nameParts.pop();
+const leadingName = nameParts.join(" ");
+
 export function Hero() {
   return (
     <section
       id="top"
       aria-label="Introduction"
-      className="relative isolate overflow-hidden pt-28 pb-16 sm:pt-36 lg:pt-40"
+      className="relative isolate overflow-hidden pt-32 pb-16 sm:pt-40 lg:pt-44"
     >
       {/* Decorative background */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-1/2 h-[36rem] w-[min(64rem,140vw)] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
+        <div className="absolute inset-0 bg-dots mask-radial" />
+        <div className="absolute -top-48 left-1/2 h-[40rem] w-[min(72rem,160vw)] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
       </div>
 
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-20">
           <div className="animate-fade-up text-center lg:text-left">
-            <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1.5 text-xs font-medium text-muted backdrop-blur sm:text-sm">
-              <span className="relative flex size-2 shrink-0">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60 motion-reduce:hidden" />
+            <p className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-border bg-surface/80 py-1.5 pr-4 pl-2 text-xs font-medium text-muted shadow-card backdrop-blur sm:text-sm">
+              <span className="relative flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
+                <span className="absolute inline-flex size-2 animate-ping rounded-full bg-emerald-500 opacity-60 motion-reduce:hidden" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
               <span className="truncate">{profile.availability}</span>
             </p>
 
-            <p className="mt-6 text-xl font-medium text-muted sm:text-2xl">
+            <p className="mt-8 text-lg font-medium text-muted sm:text-xl">
               <RotatingGreeting />
               <span className="sr-only">Hello</span>, I&apos;m
             </p>
-            <h1 className="mt-2 font-display text-[2.6rem] leading-[1.05] tracking-tight text-balance sm:text-6xl lg:text-7xl">
-              <span className="text-gradient">{profile.name}</span>
+            <h1 className="mt-3 text-[3.1rem] leading-[0.95] font-semibold tracking-[-0.045em] sm:text-7xl lg:text-[5.5rem]">
+              {leadingName} <span className="serif-accent">{lastName}</span>
             </h1>
-            <p className="mt-4 text-lg font-medium sm:text-xl">{profile.role}</p>
-            <p className="mx-auto mt-4 max-w-xl text-base text-pretty text-muted sm:text-lg lg:mx-0">
+            <p className="mt-6 text-lg font-medium sm:text-xl">{profile.role}</p>
+            <p className="mx-auto mt-3 max-w-xl text-base text-muted sm:text-lg lg:mx-0">
               {profile.headline}
             </p>
 
-            <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center lg:justify-start">
+            <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center lg:justify-start">
               <ButtonLink href="#projects">
                 View my work
-                <ArrowRightIcon />
+                <ArrowRightIcon className="transition-transform group-hover/button:translate-x-0.5" />
               </ButtonLink>
               <ButtonLink href={withBasePath(siteConfig.resume)} variant="secondary" external>
                 <DownloadIcon />
@@ -60,45 +65,41 @@ export function Hero() {
             <SocialLinks className="mt-8 justify-center lg:justify-start" />
           </div>
 
-          <div className="relative mx-auto w-full max-w-[19rem] animate-fade-up [animation-delay:120ms] sm:max-w-sm">
+          <div className="relative mx-auto w-full max-w-[18rem] animate-fade-up [animation-delay:150ms] sm:max-w-sm">
             <div
               aria-hidden="true"
-              className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-linear-to-br from-accent/50 to-accent-2/50 opacity-40 blur-2xl"
+              className="absolute -inset-6 -z-10 rounded-[3rem] bg-linear-to-br from-accent/45 to-accent-2/45 opacity-50 blur-3xl"
             />
-            <div className="rounded-[2rem] bg-linear-to-br from-accent/60 via-border to-accent-2/60 p-px">
-              <div className="overflow-hidden rounded-[calc(2rem-1px)] bg-surface p-2">
-                <Image
-                  src={portrait}
-                  alt={`Portrait of ${profile.name}`}
-                  placeholder="blur"
-                  preload
-                  sizes="(min-width: 640px) 384px, 304px"
-                  className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
-                />
-              </div>
+            <div className="rotate-2 rounded-[2.25rem] border border-border bg-surface p-2.5 shadow-card transition-transform duration-500 hover:rotate-0">
+              <Image
+                src={portrait}
+                alt={`Portrait of ${profile.name}`}
+                placeholder="blur"
+                preload
+                fetchPriority="high"
+                sizes="(min-width: 640px) 384px, 288px"
+                className="aspect-[4/5] w-full rounded-[1.75rem] object-cover"
+              />
             </div>
 
-            <div className="absolute -bottom-5 -left-3 flex items-center gap-2 rounded-2xl border border-border bg-surface/90 px-3 py-2 text-xs font-medium shadow-lg backdrop-blur sm:-left-8 sm:text-sm">
+            <div className="absolute -bottom-5 -left-4 flex items-center gap-2 rounded-full border border-border bg-surface/90 px-4 py-2.5 text-xs font-medium shadow-card backdrop-blur sm:-left-10 sm:text-sm">
               <MapPinIcon className="size-4 text-accent" />
               {profile.location}
             </div>
           </div>
         </div>
 
-        <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
+        <dl className="mt-24 grid grid-cols-3 gap-3">
           {stats.map(({ value, label }) => (
-            <div
-              key={label}
-              className="flex flex-col-reverse gap-1 bg-surface px-4 py-5 text-center sm:py-6"
-            >
+            <div key={label} className="flex flex-col-reverse gap-1 card px-5 py-6 sm:px-6 sm:py-7">
               <dt className="text-xs text-muted sm:text-sm">{label}</dt>
-              <dd className="font-display text-2xl sm:text-3xl">{value}</dd>
+              <dd className="text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{value}</dd>
             </div>
           ))}
         </dl>
       </Container>
 
-      <div className="mt-14 overflow-hidden mask-fade-x">
+      <div className="mt-16 overflow-hidden mask-fade-x">
         <ul
           aria-label="Core tech stack"
           className="flex w-max animate-marquee gap-3 hover:[animation-play-state:paused] motion-reduce:animate-none"
@@ -107,7 +108,7 @@ export function Hero() {
             <li
               key={`${tech.name}-${index}`}
               aria-hidden={index >= coreStack.length ? true : undefined}
-              className="flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium whitespace-nowrap"
+              className="flex items-center gap-2 rounded-full border border-border bg-surface/70 px-4 py-2 text-sm font-medium whitespace-nowrap text-muted"
             >
               <TechIcon tech={tech} className="size-4" />
               {tech.name}

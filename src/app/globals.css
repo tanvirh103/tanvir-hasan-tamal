@@ -3,38 +3,40 @@
 /* Class-based dark mode: `.dark` on <html> is set before paint by the theme script. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ---------- Design tokens ---------- */
+/* ---------- Design tokens (OKLCH) ---------- */
 :root {
-  --background: #f8fafb;
-  --surface: #ffffff;
-  --surface-muted: #f1f4f6;
-  --foreground: #0b1015;
-  --muted: #55606b;
-  --border: rgb(15 23 32 / 0.09);
-  --border-strong: rgb(15 23 32 / 0.16);
-  --accent: #0d9488;
-  --accent-2: #0284c7;
-  --accent-foreground: #ffffff;
-  --accent-soft: rgb(13 148 136 / 0.1);
-  --glow: rgb(13 148 136 / 0.18);
-  --grid-line: rgb(15 23 32 / 0.045);
+  --background: oklch(0.985 0.003 275);
+  --surface: oklch(1 0 0);
+  --surface-muted: oklch(0.965 0.005 275);
+  --foreground: oklch(0.18 0.02 275);
+  --muted: oklch(0.5 0.02 275);
+  --border: oklch(0.18 0.02 275 / 0.08);
+  --border-strong: oklch(0.18 0.02 275 / 0.16);
+  --accent: oklch(0.53 0.24 275);
+  --accent-2: oklch(0.66 0.2 330);
+  --accent-foreground: oklch(0.99 0 0);
+  --accent-soft: oklch(0.53 0.24 275 / 0.09);
+  --glow: oklch(0.6 0.22 280 / 0.22);
+  --dot: oklch(0.18 0.02 275 / 0.09);
+  --shadow: 0 1px 2px oklch(0.18 0.02 275 / 0.04), 0 8px 24px -12px oklch(0.18 0.02 275 / 0.12);
   color-scheme: light;
 }
 
 .dark {
-  --background: #07090c;
-  --surface: #0d1117;
-  --surface-muted: #141a21;
-  --foreground: #eef2f5;
-  --muted: #9aa5b1;
-  --border: rgb(255 255 255 / 0.08);
-  --border-strong: rgb(255 255 255 / 0.16);
-  --accent: #5eead4;
-  --accent-2: #38bdf8;
-  --accent-foreground: #04201c;
-  --accent-soft: rgb(94 234 212 / 0.1);
-  --glow: rgb(45 212 191 / 0.16);
-  --grid-line: rgb(255 255 255 / 0.035);
+  --background: oklch(0.135 0.012 275);
+  --surface: oklch(0.175 0.014 275);
+  --surface-muted: oklch(0.16 0.013 275);
+  --foreground: oklch(0.96 0.005 275);
+  --muted: oklch(0.7 0.02 275);
+  --border: oklch(1 0 0 / 0.07);
+  --border-strong: oklch(1 0 0 / 0.14);
+  --accent: oklch(0.74 0.15 280);
+  --accent-2: oklch(0.78 0.14 335);
+  --accent-foreground: oklch(0.16 0.03 280);
+  --accent-soft: oklch(0.74 0.15 280 / 0.12);
+  --glow: oklch(0.6 0.2 285 / 0.2);
+  --dot: oklch(1 0 0 / 0.06);
+  --shadow: 0 1px 2px oklch(0 0 0 / 0.3), 0 12px 32px -16px oklch(0 0 0 / 0.6);
   color-scheme: dark;
 }
 
@@ -51,11 +53,14 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-cal-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
 
-  --animate-marquee: marquee 40s linear infinite;
-  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --shadow-card: var(--shadow);
+
+  --animate-marquee: marquee 45s linear infinite;
+  --animate-fade-up: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-flip-in: flip-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -68,11 +73,13 @@
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(20px);
+    filter: blur(6px);
   }
   to {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 }
 
@@ -92,11 +99,24 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+    interpolate-size: allow-keywords;
   }
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
-    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
@@ -104,7 +124,7 @@
   }
 
   section[id] {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 6rem;
   }
 
   :focus-visible {
@@ -122,38 +142,80 @@
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 220ms;
+  animation-duration: 240ms;
   animation-timing-function: ease-out;
 }
 
 /* ---------- Utilities ---------- */
-@utility text-gradient {
-  @apply bg-linear-to-r from-accent to-accent-2 bg-clip-text text-transparent;
+
+/* Italic serif accent used inside headings, e.g. "fast, <em>reliable</em>". */
+@utility serif-accent {
+  @apply font-serif font-normal tracking-normal italic;
+  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  background-clip: text;
+  color: transparent;
+  padding-inline-end: 0.08em;
 }
 
-@utility bg-grid {
-  background-image:
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: 56px 56px;
+@utility bg-dots {
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+  background-size: 22px 22px;
 }
 
 @utility mask-fade-x {
-  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
 }
 
 @utility mask-fade-b {
-  mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent);
 }
 
-/* Scroll-driven reveal: progressive enhancement, zero JavaScript. */
+@utility mask-radial {
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* Bordered surface card with a soft shadow and an accent edge on hover. */
+@utility card {
+  @apply rounded-3xl border border-border bg-surface shadow-card transition-[border-color,translate,box-shadow] duration-300;
+}
+
+@utility card-hover {
+  &:hover {
+    @apply -translate-y-0.5 border-accent/35;
+  }
+}
+
+/* Header gets its glass background from scroll position alone, with no JavaScript. */
+@utility header-glass {
+  background-color: color-mix(in oklch, var(--background) 72%, transparent);
+  border-color: var(--border);
+  backdrop-filter: blur(16px) saturate(1.6);
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .header-scroll {
+      animation: header-in linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 80px;
+    }
+  }
+
+  /* Scroll-driven reveal: progressive enhancement, zero JavaScript. */
   @supports (animation-timeline: view()) {
     .reveal {
       animation: fade-up linear both;
       animation-timeline: view();
-      animation-range: entry 0% entry 40%;
+      animation-range: entry 0% entry 35%;
     }
+  }
+}
+
+@keyframes header-in {
+  from {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
   }
 }
 

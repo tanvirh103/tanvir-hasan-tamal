@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
+  experimental: {
+    // Inline the (small) Tailwind stylesheet into each HTML page, removing a render-blocking request.
+    inlineCss: true,
+  },
   images: {
     // Static export has no image optimization server; assets are pre-optimized.
     unoptimized: true,

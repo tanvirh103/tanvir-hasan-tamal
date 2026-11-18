@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cal_Sans, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -8,19 +8,26 @@ import { themeInitScript } from "@/lib/theme";
 
 import "./globals.css";
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-geist",
 });
 
-const calSans = Cal_Sans({
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist-mono",
+  // Only used for small labels; skip preloading so it never competes with the main text font.
+  preload: false,
+});
+
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
+  style: "italic",
   display: "swap",
-  variable: "--font-cal-sans",
-  // Cal Sans ships no metric overrides, so rely on the CSS fallback stack instead.
-  adjustFontFallback: false,
+  variable: "--font-instrument-serif",
 });
 
 const ogImageUrl = `${siteConfig.url}${siteConfig.ogImage}`;
@@ -79,15 +86,19 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafb" },
-    { media: "(prefers-color-scheme: dark)", color: "#07090c" },
+    { media: "(prefers-color-scheme: light)", color: "#f9f9fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0d14" },
   ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     // The theme script mutates the class before hydration, hence the warning suppression.
-    <html lang="en" className={`${inter.variable} ${calSans.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {process.env.NODE_ENV === "production" && (
           <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
@@ -98,8 +109,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {basePath && <link rel="icon" href={withBasePath("/favicon.ico")} sizes="48x48" />}
       </head>
       <body>
-        {/* Site-wide grid backdrop; every section's content sits on top of it. */}
-        <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 bg-grid" />
         <a
           href="#main"
           className="sr-only z-[60] rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background focus:not-sr-only focus:fixed focus:top-3 focus:left-3"

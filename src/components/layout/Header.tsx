@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/icons";
-import { Container } from "@/components/ui/Container";
 import { navItems, profile } from "@/data/profile";
-import type { NavItem } from "@/types";
 import { cn } from "@/lib/cn";
 import { siteConfig, withBasePath } from "@/lib/site";
+import type { NavItem } from "@/types";
 
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -42,13 +41,10 @@ const sectionIds = ["top", ...navItems.map((item) => item.id)];
 
 const normalize = (path: string) => path.replace(/\/+$/, "") || "/";
 
-function navHref({ id, href }: NavItem): string {
-  return href ?? `/#${id}`;
-}
+const navHref = ({ id, href }: NavItem): string => href ?? `/#${id}`;
 
 export function Header() {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [isScrolled, setScrolled] = useState(false);
   const pathname = normalize(usePathname());
   const activeSection = useActiveSection(sectionIds, pathname);
   const isHome = pathname === "/";
@@ -58,67 +54,57 @@ export function Header() {
     (isHome && activeSection === item.id);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     if (!isMenuOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMenuOpen(false);
     };
-    const onResize = () => {
-      if (window.matchMedia("(min-width: 1024px)").matches) setMenuOpen(false);
-    };
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => desktop.matches && setMenuOpen(false);
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("resize", onResize);
+    desktop.addEventListener("change", onChange);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("resize", onResize);
+      desktop.removeEventListener("change", onChange);
     };
   }, [isMenuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-300",
-        isScrolled || isMenuOpen
-          ? "border-border bg-background/80 backdrop-blur-xl"
-          : "border-transparent bg-transparent",
-      )}
-    >
-      <Container className="flex h-16 items-center justify-between gap-4">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
+      <div
+        className={cn(
+          "mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-full border header-glass pr-2 pl-2 shadow-card sm:h-16 sm:pl-3",
+          !isMenuOpen && "header-scroll",
+        )}
+      >
         <Link
           href="/"
           onClick={closeMenu}
-          className="group flex items-center gap-2.5"
+          className="flex items-center gap-2.5 rounded-full"
           aria-label={`${profile.name} — home`}
         >
-          <span className="flex size-9 items-center justify-center rounded-xl bg-linear-to-br from-accent to-accent-2 font-display text-sm text-accent-foreground shadow-sm">
+          <span className="flex size-10 items-center justify-center rounded-full bg-foreground text-sm font-semibold tracking-tight text-background">
             TH
           </span>
-          <span className="hidden font-display text-lg tracking-tight sm:block">
+          <span className="hidden text-[0.95rem] font-semibold tracking-tight sm:block">
             {profile.name}
           </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-0.5">
             {navItems.map((item) => (
               <li key={item.id}>
                 <Link
                   href={navHref(item)}
                   aria-current={isActive(item) ? "true" : undefined}
                   className={cn(
-                    "rounded-full px-3 py-2 text-sm font-medium transition-colors",
+                    "rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
                     isActive(item)
-                      ? "bg-accent-soft text-accent"
+                      ? "bg-foreground/[0.06] text-foreground dark:bg-white/10"
                       : "text-muted hover:text-foreground",
                   )}
                 >
@@ -129,7 +115,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <ThemeToggle />
           <a
             href={withBasePath(siteConfig.resume)}
@@ -151,45 +137,40 @@ export function Header() {
             {isMenuOpen ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
           </button>
         </div>
-      </Container>
+      </div>
 
       <div
         id="mobile-menu"
         hidden={!isMenuOpen}
-        className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-background lg:hidden"
+        className="mx-auto mt-2 max-h-[calc(100dvh-6rem)] max-w-6xl animate-fade-up overflow-y-auto rounded-3xl border header-glass p-3 shadow-card [animation-duration:0.35s] lg:hidden"
       >
-        <Container className="flex flex-col gap-6 py-6">
-          <nav aria-label="Mobile">
-            <ul className="flex flex-col">
-              {navItems.map((item, index) => (
-                <li key={item.id} className="border-b border-border">
-                  <Link
-                    href={navHref(item)}
-                    onClick={closeMenu}
-                    className={cn(
-                      "flex items-center justify-between py-4 text-lg font-medium",
-                      isActive(item) ? "text-accent" : "text-foreground",
-                    )}
-                  >
-                    {item.label}
-                    <span className="font-mono text-xs text-muted">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <a
-            href={withBasePath(siteConfig.resume)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-foreground text-sm font-medium text-background"
-          >
-            <DownloadIcon className="size-4" />
-            Download Resume
-          </a>
-        </Container>
+        <nav aria-label="Mobile">
+          <ul className="flex flex-col">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={navHref(item)}
+                  onClick={closeMenu}
+                  className={cn(
+                    "flex items-center rounded-2xl px-4 py-3.5 text-lg font-medium transition-colors hover:bg-surface-muted",
+                    isActive(item) ? "text-accent" : "text-foreground",
+                  )}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <a
+          href={withBasePath(siteConfig.resume)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground text-sm font-medium text-background"
+        >
+          <DownloadIcon className="size-4" />
+          Download Resume
+        </a>
       </div>
     </header>
   );
