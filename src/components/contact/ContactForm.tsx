@@ -27,7 +27,7 @@ function validate(values: Record<FieldName, string>): FieldErrors {
 }
 
 const inputClassName =
-  "w-full rounded-xl border border-border bg-background/60 px-4 py-3.5 text-base text-foreground placeholder:text-muted/70 transition-[border-color,box-shadow] outline-none hover:border-border-strong focus:border-accent focus:shadow-[0_0_0_4px_var(--accent-soft),0_0_24px_-8px_var(--glow)] aria-[invalid=true]:border-red-500 sm:text-sm";
+  "w-full rounded-2xl border border-transparent bg-surface-muted px-4 py-3.5 text-base text-foreground placeholder:text-muted/70 transition-[border-color,box-shadow,background-color] duration-300 outline-none hover:border-border focus:border-accent focus:bg-surface focus:shadow-[0_0_0_4px_var(--accent-soft)] aria-[invalid=true]:border-red-500 sm:text-sm";
 
 interface FieldProps {
   name: FieldName;

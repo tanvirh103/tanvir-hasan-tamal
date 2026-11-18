@@ -58,9 +58,9 @@ export const socialLinks: SocialLink[] = [
 ];
 
 export const navItems: NavItem[] = [
+  { id: "skills", label: "Skills" },
   { id: "about", label: "About" },
   { id: "experience", label: "Experience" },
-  { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
   { id: "education", label: "Education" },
   { id: "achievements", label: "Achievements" },

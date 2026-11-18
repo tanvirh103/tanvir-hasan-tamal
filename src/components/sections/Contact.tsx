@@ -10,51 +10,44 @@ export function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="px-4 py-24 sm:px-6 sm:py-32 lg:px-10"
+      className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8"
     >
-      <div className="reveal mx-auto max-w-6xl">
-        <div className="neon-frame shadow-[0_30px_90px_-40px_var(--glow)]">
-          <div className="relative isolate overflow-hidden rounded-[1.3rem] bg-surface px-6 py-14 sm:px-12 sm:py-16">
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-              <div className="absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_top_right,#000,transparent_70%)] opacity-70" />
-              <div className="orb absolute -top-24 -right-24 size-80 rounded-full bg-accent/20 blur-[100px]" />
-              <div className="orb absolute -bottom-24 -left-16 size-72 rounded-full bg-accent-2/15 blur-[100px] [animation-delay:-7s]" />
-            </div>
-
-            <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-              <div>
-                <p className="font-mono text-sm text-accent">
-                  <span className="text-muted">$ </span>
-                  ./say-hello.sh
-                </p>
-                <h2
-                  id="contact-heading"
-                  className="mt-4 text-4xl font-bold tracking-[-0.03em] sm:text-5xl lg:text-6xl"
-                >
-                  Let&apos;s build something <span className="text-neon">great together</span>
-                </h2>
-                <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-                  Have a project, a role or just want to say hi? Send a message and I&apos;ll get
-                  back to you as soon as I can.
-                </p>
-
-                <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                  <ButtonLink href="/contact/">
-                    Send a message
-                    <ArrowRightIcon className="transition-transform group-hover/button:translate-x-1" />
-                  </ButtonLink>
-                  {linkedin && (
-                    <ButtonLink href={linkedin.href} variant="secondary" external>
-                      <SocialIcon platform="linkedin" />
-                      Connect on LinkedIn
-                    </ButtonLink>
-                  )}
-                </div>
-              </div>
-
-              <ContactDetails />
-            </div>
+      <div className="mx-auto grid max-w-6xl gap-3 sm:gap-4 lg:grid-cols-[1.4fr_1fr]">
+        <div className="reveal flex flex-col justify-between gap-10 rounded-[1.75rem] bg-foreground p-8 text-background sm:p-12">
+          <div>
+            <p className="inline-flex items-center gap-2 text-sm font-medium opacity-75">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+              Contact
+            </p>
+            <h2
+              id="contact-heading"
+              className="mt-4 text-4xl leading-[1.05] font-semibold tracking-[-0.04em] sm:text-5xl lg:text-6xl"
+            >
+              Let&apos;s build something <span className="opacity-60">great together.</span>
+            </h2>
+            <p className="mt-5 max-w-lg text-base leading-relaxed opacity-70 sm:text-lg">
+              Have a project, a role or just want to say hi? Send a message and I&apos;ll get back
+              to you as soon as I can.
+            </p>
           </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/contact/" variant="inverse">
+              Send a message
+              <ArrowRightIcon className="transition-transform duration-300 group-hover/button:translate-x-0.5" />
+            </ButtonLink>
+            {linkedin && (
+              <ButtonLink href={linkedin.href} variant="inverse-outline" external>
+                <SocialIcon platform="linkedin" />
+                LinkedIn
+              </ButtonLink>
+            )}
+          </div>
+        </div>
+
+        <div className="reveal flex flex-col justify-center tile p-6 sm:p-8">
+          <p className="mb-4 text-sm font-medium text-muted">Reach me directly</p>
+          <ContactDetails />
         </div>
       </div>
     </section>

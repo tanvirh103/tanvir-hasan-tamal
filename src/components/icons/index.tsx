@@ -38,6 +38,25 @@ export const ArrowRightIcon = (props: IconProps) => (
   </LineIcon>
 );
 
+export const UserIcon = (props: IconProps) => (
+  <LineIcon {...props}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" />
+  </LineIcon>
+);
+
+export const CodeIcon = (props: IconProps) => (
+  <LineIcon {...props}>
+    <path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" />
+  </LineIcon>
+);
+
+export const ChevronDownIcon = (props: IconProps) => (
+  <LineIcon {...props}>
+    <path d="m6 9 6 6 6-6" />
+  </LineIcon>
+);
+
 export const ArrowUpIcon = (props: IconProps) => (
   <LineIcon {...props}>
     <path d="M12 19V5M6 11l6-6 6 6" />

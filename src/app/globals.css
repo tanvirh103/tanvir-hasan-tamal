@@ -5,57 +5,42 @@
 
 /*
  * Design tokens (OKLCH)
- * Direction: a neon developer workspace. Cyan is the primary signal and magenta the secondary.
- * Dark mode glows on deep navy; light mode keeps the same hues, deepened for contrast, with
- * coloured soft shadows in place of glow.
+ * Direction: a calm bento board. Neutral grey page, clean tiles, one warm orange accent used
+ * sparingly for emphasis. Both themes share the same structure; dark is a soft charcoal.
  */
 :root {
-  --background: oklch(0.985 0.004 260);
+  --background: oklch(0.965 0.003 260);
   --surface: oklch(1 0 0);
-  --surface-muted: oklch(0.962 0.008 260);
-  --foreground: oklch(0.2 0.03 265);
-  --muted: oklch(0.47 0.03 262);
-  --border: oklch(0.2 0.03 265 / 0.1);
-  --border-strong: oklch(0.2 0.03 265 / 0.2);
-  --accent: oklch(0.52 0.13 215);
-  --accent-2: oklch(0.52 0.21 320);
+  --surface-muted: oklch(0.948 0.004 260);
+  --foreground: oklch(0.21 0.012 260);
+  --muted: oklch(0.5 0.012 260);
+  --border: oklch(0.21 0.012 260 / 0.08);
+  --border-strong: oklch(0.21 0.012 260 / 0.16);
+  --accent: oklch(0.55 0.16 42);
   --accent-foreground: oklch(0.99 0 0);
-  --accent-soft: oklch(0.52 0.13 215 / 0.1);
-  --highlight: oklch(0.6 0.13 65);
-  --glow: oklch(0.6 0.14 215 / 0.22);
-  --glow-2: oklch(0.6 0.21 320 / 0.16);
-  --grid-line: oklch(0.2 0.03 265 / 0.06);
-  --code-bg: oklch(0.975 0.006 260);
-  --syn-keyword: oklch(0.5 0.21 320);
-  --syn-key: oklch(0.48 0.13 230);
-  --syn-string: oklch(0.5 0.13 155);
-  --syn-number: oklch(0.55 0.15 55);
-  --syn-comment: oklch(0.6 0.02 262);
+  --accent-soft: oklch(0.62 0.16 45 / 0.12);
+  --highlight: oklch(0.62 0.13 75);
+  --tile-shadow:
+    0 1px 2px oklch(0.21 0.012 260 / 0.04), 0 8px 24px -16px oklch(0.21 0.012 260 / 0.14);
+  --tile-shadow-hover:
+    0 2px 4px oklch(0.21 0.012 260 / 0.05), 0 22px 40px -22px oklch(0.21 0.012 260 / 0.28);
   color-scheme: light;
 }
 
 .dark {
-  --background: oklch(0.135 0.02 270);
-  --surface: oklch(0.175 0.025 270);
-  --surface-muted: oklch(0.155 0.022 270);
-  --foreground: oklch(0.95 0.01 250);
-  --muted: oklch(0.72 0.03 260);
-  --border: oklch(0.9 0.05 250 / 0.09);
-  --border-strong: oklch(0.9 0.05 250 / 0.18);
-  --accent: oklch(0.85 0.13 200);
-  --accent-2: oklch(0.72 0.2 320);
-  --accent-foreground: oklch(0.15 0.03 270);
-  --accent-soft: oklch(0.85 0.13 200 / 0.12);
-  --highlight: oklch(0.84 0.12 80);
-  --glow: oklch(0.85 0.13 200 / 0.35);
-  --glow-2: oklch(0.72 0.2 320 / 0.3);
-  --grid-line: oklch(0.85 0.13 200 / 0.09);
-  --code-bg: oklch(0.115 0.02 270);
-  --syn-keyword: oklch(0.76 0.18 320);
-  --syn-key: oklch(0.84 0.12 210);
-  --syn-string: oklch(0.84 0.14 150);
-  --syn-number: oklch(0.83 0.12 70);
-  --syn-comment: oklch(0.58 0.03 262);
+  --background: oklch(0.15 0.006 260);
+  --surface: oklch(0.195 0.008 260);
+  --surface-muted: oklch(0.225 0.008 260);
+  --foreground: oklch(0.95 0.004 260);
+  --muted: oklch(0.7 0.01 260);
+  --border: oklch(1 0 0 / 0.07);
+  --border-strong: oklch(1 0 0 / 0.14);
+  --accent: oklch(0.75 0.15 52);
+  --accent-foreground: oklch(0.18 0.02 45);
+  --accent-soft: oklch(0.75 0.15 52 / 0.14);
+  --highlight: oklch(0.82 0.12 80);
+  --tile-shadow: 0 1px 2px oklch(0 0 0 / 0.3), 0 10px 30px -18px oklch(0 0 0 / 0.6);
+  --tile-shadow-hover: 0 2px 6px oklch(0 0 0 / 0.35), 0 26px 50px -24px oklch(0 0 0 / 0.75);
   color-scheme: dark;
 }
 
@@ -68,35 +53,14 @@
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
-  --color-accent-2: var(--accent-2);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
   --color-highlight: var(--highlight);
-  --color-code: var(--code-bg);
-  --color-syn-keyword: var(--syn-keyword);
-  --color-syn-key: var(--syn-key);
-  --color-syn-string: var(--syn-string);
-  --color-syn-number: var(--syn-number);
-  --color-syn-comment: var(--syn-comment);
 
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 
-  --animate-marquee: marquee 50s linear infinite;
   --animate-flip-in: flip-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Animatable angle for the rotating gradient borders and portrait ring. */
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 @keyframes flip-in {
@@ -116,6 +80,8 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     overflow-x: clip;
+    /* Lets <details> animate to and from `auto` height. */
+    interpolate-size: allow-keywords;
   }
 
   body {
@@ -138,11 +104,11 @@
   }
 
   section[id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 5rem;
   }
 
   :focus-visible {
-    @apply rounded-sm outline-2 outline-offset-2 outline-accent;
+    @apply rounded-md outline-2 outline-offset-2 outline-accent;
   }
 
   html.theme-switching *,
@@ -160,117 +126,64 @@
 
 /* ---------- Utilities ---------- */
 
-/* Cyan-to-magenta gradient text for names and key words in headings. */
-@utility text-neon {
-  background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 90%);
-  background-clip: text;
-  color: transparent;
-}
-
-/* Faint blueprint grid used behind sections. */
-@utility bg-grid {
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-@utility mask-fade-x {
-  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-}
-
-@utility mask-fade-y {
-  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 75%, transparent);
-}
-
-/* Glass card with a cursor spotlight. The pointer position comes from InteractiveEffects. */
-@utility glass-card {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  border-radius: 1.25rem;
+/* The bento tile: one surface, one hairline, one soft shadow. */
+@utility tile {
+  border-radius: 1.75rem;
   border: 1px solid var(--border);
-  background-color: color-mix(in oklch, var(--surface) 78%, transparent);
-  backdrop-filter: blur(12px);
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    translate 0.3s ease;
+  background-color: var(--surface);
+  box-shadow: var(--tile-shadow);
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: 0;
-    background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 50%),
-      var(--glow),
-      transparent 60%
-    );
-    transition: opacity 0.35s ease;
-  }
+/* Interactive tiles lift slightly on hover. */
+@utility tile-hover {
+  transition:
+    translate 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease;
 
   &:hover {
-    border-color: color-mix(in oklch, var(--accent) 45%, transparent);
-    box-shadow: 0 20px 50px -24px var(--glow);
-  }
-
-  &:hover::before {
-    opacity: 1;
+    translate: 0 -3px;
+    box-shadow: var(--tile-shadow-hover);
+    border-color: var(--border-strong);
   }
 }
 
-/* Rotating cyan/magenta border. Wrap a .glass-card (or any surface) in this. */
-@utility neon-frame {
-  position: relative;
-  border-radius: 1.35rem;
-  padding: 1px;
-  background: conic-gradient(
-    from var(--angle),
-    transparent 0deg,
-    var(--accent) 60deg,
-    var(--accent-2) 140deg,
-    transparent 220deg,
-    transparent 360deg
-  );
+/* Soft dotted texture for decorative tile corners. */
+@utility bg-dots {
+  background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
+  background-size: 16px 16px;
 }
 
-/* Primary call to action: gradient fill with a soft neon glow. */
-@utility btn-neon {
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
-  color: var(--accent-foreground);
-  box-shadow:
-    0 0 0 1px color-mix(in oklch, var(--accent) 40%, transparent),
-    0 10px 30px -10px var(--glow);
-  transition:
-    box-shadow 0.3s ease,
-    translate 0.3s ease,
-    filter 0.3s ease;
-
-  &:hover {
-    translate: 0 -1px;
-    filter: brightness(1.06);
-    box-shadow:
-      0 0 0 1px color-mix(in oklch, var(--accent) 60%, transparent),
-      0 16px 44px -12px var(--glow),
-      0 0 28px -6px var(--glow-2);
+/* Smooth open and close for <details> accordions (supported browsers animate, others snap). */
+@utility accordion {
+  &::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 0.45s allow-discrete;
   }
-}
 
-/* 3D tilt target: InteractiveEffects sets --rx/--ry from the pointer position. */
-@utility tilt {
-  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.25s ease-out;
-  transform-style: preserve-3d;
+  &[open]::details-content {
+    block-size: auto;
+  }
+
+  & > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  & > summary::-webkit-details-marker {
+    display: none;
+  }
 }
 
 /* ---------- Motion ----------
- * Progressive: content is visible without these. Reduced motion disables all of them. */
+ * Progressive and quiet: content is visible without these, and reduced motion turns them off. */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(32px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -281,58 +194,11 @@
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(14px) scale(0.99);
   }
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-@keyframes spin-angle {
-  to {
-    --angle: 360deg;
-  }
-}
-
-@keyframes orb-drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(6%, -8%) scale(1.12);
-  }
-}
-
-@keyframes grid-flow {
-  to {
-    background-position: 0 48px;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes grow-y {
-  from {
-    transform: scaleY(0);
-  }
-  to {
-    transform: scaleY(1);
   }
 }
 
@@ -345,18 +211,10 @@
   }
 }
 
-@keyframes header-solid {
-  from {
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-  }
-}
-
 @keyframes pulse-ring {
   from {
     transform: scale(1);
-    opacity: 0.7;
+    opacity: 0.6;
   }
   to {
     transform: scale(2.6);
@@ -366,28 +224,8 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .fade-up {
-    animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
     animation-delay: var(--delay, 0ms);
-  }
-
-  .neon-frame {
-    animation: spin-angle 6s linear infinite;
-  }
-
-  .orb {
-    animation: orb-drift 18s ease-in-out infinite;
-  }
-
-  .grid-floor {
-    animation: grid-flow 3s linear infinite;
-  }
-
-  .float {
-    animation: float 7s ease-in-out infinite;
-  }
-
-  .caret {
-    animation: blink 1s steps(1) infinite;
   }
 
   .pulse-dot::after {
@@ -399,26 +237,11 @@
     animation: pulse-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
-  .marquee:hover .animate-marquee {
-    animation-play-state: paused;
-  }
-
   @supports (animation-timeline: view()) {
     .reveal {
       animation: rise linear both;
       animation-timeline: view();
-      animation-range: entry 0% entry 35%;
-    }
-
-    /* The experience timeline's glowing spine fills as the list scrolls past. */
-    .timeline-fill {
-      animation: grow-y linear both;
-      animation-timeline: --timeline;
-      animation-range: entry 40% exit 60%;
-    }
-
-    .timeline {
-      view-timeline: --timeline block;
+      animation-range: entry 0% entry 30%;
     }
   }
 
@@ -426,12 +249,6 @@
     .scroll-progress {
       animation: grow-x linear both;
       animation-timeline: scroll(root);
-    }
-
-    .header-bar {
-      animation: header-solid linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 120px;
     }
   }
 }
