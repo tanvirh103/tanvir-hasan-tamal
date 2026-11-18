@@ -5,7 +5,7 @@ export const profile = {
   firstName: "Tanvir",
   role: "Full-Stack Software Engineer",
   location: "Dhaka, Bangladesh",
-  availability: "Full-Stack Engineer at EraVend GmbH & Co. KG",
+  availability: "Full-Stack Engineer",
   email: "tanvirh103@gmail.com",
   phone: "+8801534103985",
   headline:
