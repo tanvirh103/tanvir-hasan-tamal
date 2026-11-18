@@ -11,7 +11,7 @@ export function Footer() {
       <Container className="flex flex-col items-center gap-6 py-10 text-center md:flex-row md:justify-between md:text-left">
         <div>
           <p className="font-display text-lg">{profile.name}</p>
-          <p className="mt-1 text-sm text-muted">© {year} · Built with Next.js & Tailwind CSS</p>
+          <p className="mt-1 text-sm text-muted">© {year}</p>
         </div>
         <SocialLinks className="justify-center" />
         <a

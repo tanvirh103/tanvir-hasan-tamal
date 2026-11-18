@@ -85,7 +85,7 @@ export function Hero() {
           </div>
         </div>
 
-        <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
+        <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
           {stats.map(({ value, label }) => (
             <div
               key={label}

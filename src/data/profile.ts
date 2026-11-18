@@ -5,7 +5,7 @@ export const profile = {
   firstName: "Tanvir",
   role: "Full-Stack Software Engineer",
   location: "Dhaka, Bangladesh",
-  availability: "Full-Stack Engineer at EraVend GmbH & Co. KG",
+  availability: "Full-Stack Engineer",
   email: "tanvirh103@gmail.com",
   phone: "+8801534103985",
   headline:
@@ -38,7 +38,6 @@ export const stats: Stat[] = [
   { value: "3", label: "Companies" },
   { value: "30+", label: "Modules shipped" },
   { value: "10+", label: "Projects built" },
-  { value: "1st", label: "AIUB CS Fest 2024" },
 ];
 
 export const socialLinks: SocialLink[] = [
