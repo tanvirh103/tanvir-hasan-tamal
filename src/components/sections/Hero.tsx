@@ -6,7 +6,6 @@ import { ArrowRightIcon, DownloadIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { RotatingGreeting } from "@/components/ui/RotatingGreeting";
 import { SocialLinks } from "@/components/ui/SocialLinks";
-import { TechIcon } from "@/components/ui/TechIcon";
 import { TypingText } from "@/components/ui/TypingText";
 import { profile, stats } from "@/data/profile";
 import { coreStack } from "@/data/skills";
@@ -40,7 +39,7 @@ function CodeCard() {
           <span className="size-3 rounded-full bg-[#28c840]" aria-hidden="true" />
           <span className="ml-3 font-mono text-xs text-muted">engineer.ts</span>
         </div>
-        <pre className="overflow-x-auto p-5 font-mono text-[0.8rem] leading-7 sm:p-6 sm:text-sm">
+        <pre className="p-5 font-mono text-[0.8rem] leading-7 break-words whitespace-pre-wrap sm:p-6 sm:text-sm">
           <code>
             <span className="text-syn-comment">{"// building things that scale"}</span>
             {"\n"}
@@ -173,21 +172,6 @@ export function Hero() {
             </div>
           ))}
         </dl>
-      </div>
-
-      <div className="marquee mt-16 overflow-hidden mask-fade-x">
-        <ul aria-label="Core tech stack" className="flex w-max animate-marquee gap-3">
-          {[...coreStack, ...coreStack].map((tech, index) => (
-            <li
-              key={`${tech.name}-${index}`}
-              aria-hidden={index >= coreStack.length ? true : undefined}
-              className="flex items-center gap-2 rounded-lg border border-border bg-surface/60 px-4 py-2 font-mono text-sm whitespace-nowrap text-muted backdrop-blur"
-            >
-              <TechIcon tech={tech} className="size-4" />
-              {tech.name}
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
