@@ -4,7 +4,6 @@ import type { Transporter } from "nodemailer";
 // Contact form endpoint. Runs on the server (Vercel Node.js runtime), so the Gmail App Password
 // never reaches the browser. Required environment variables:
 //   GMAIL_USER          the Gmail address that sends the mail
-//   GMAIL_APP_PASSWORD  a Google App Password for that account (2-Step Verification must be on)
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
