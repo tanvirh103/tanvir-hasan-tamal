@@ -5,7 +5,6 @@
 //   ALLOWED_ORIGIN      the site allowed to call this API, e.g. https://tanvirh103.github.io
 // Optional: CONTACT_TO (defaults to GMAIL_USER).
 import nodemailer from "nodemailer";
-
 const LIMITS = { name: 100, email: 150, subject: 150, message: 5000 };
 const EMAIL_PATTERN = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
