@@ -3,8 +3,7 @@ import { Cal_Sans, Inter } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { basePath, siteConfig, withBasePath } from "@/lib/site";
-import { frameBustScript } from "@/lib/framebust";
+import { siteConfig } from "@/lib/site";
 import { themeInitScript } from "@/lib/theme";
 
 import "./globals.css";
@@ -75,12 +74,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       suppressHydrationWarning
     >
       <head>
-        {/* The Content-Security-Policy <meta> is added to the export by scripts/csp-hashes.mjs. */}
-        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script dangerouslySetInnerHTML={{ __html: frameBustScript }} />
-        {/* Next.js omits favicon.ico when a basePath is set; Safari needs it (no SVG favicons). */}
-        {basePath && <link rel="icon" href={withBasePath("/favicon.ico")} sizes="48x48" />}
       </head>
       <body>
         {/* Site-wide grid backdrop; every section's content sits on top of it. */}

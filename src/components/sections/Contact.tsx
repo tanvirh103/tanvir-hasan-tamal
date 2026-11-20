@@ -43,7 +43,7 @@ export function Contact() {
             </p>
 
             <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-              <ButtonLink href="/contact/">
+              <ButtonLink href="/contact">
                 <MailIcon />
                 Say hello
               </ButtonLink>

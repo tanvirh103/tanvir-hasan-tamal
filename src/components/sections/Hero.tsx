@@ -9,7 +9,7 @@ import { SocialLinks } from "@/components/ui/SocialLinks";
 import { TechIcon } from "@/components/ui/TechIcon";
 import { profile, stats } from "@/data/profile";
 import { coreStack } from "@/data/skills";
-import { siteConfig, withBasePath } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 
 export function Hero() {
   return (
@@ -51,7 +51,7 @@ export function Hero() {
                 View my work
                 <ArrowRightIcon />
               </ButtonLink>
-              <ButtonLink href={withBasePath(siteConfig.resume)} variant="secondary" external>
+              <ButtonLink href={siteConfig.resume} variant="secondary" external>
                 <DownloadIcon />
                 Download Resume
               </ButtonLink>

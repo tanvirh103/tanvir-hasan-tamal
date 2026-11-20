@@ -11,5 +11,5 @@ export default defineConfig([
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "contact-api/**"]),
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);

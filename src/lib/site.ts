@@ -1,26 +1,16 @@
-export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
-/** Prefixes a file in `public/` with the deployment base path. */
-export function withBasePath(path: `/${string}`): string {
-  return `${basePath}${path}`;
-}
-
 export const siteConfig = {
   name: "Tanvir Hasan Tamal",
   shortName: "Tanvir",
   title: "Tanvir Hasan Tamal – Full-Stack Software Engineer",
   description:
     "Full-stack software engineer building scalable, multi-tenant SaaS platforms with Next.js, NestJS, TypeScript, MongoDB and PostgreSQL. Explore my experience, projects and skills.",
-  url: "https://tanvirh103.github.io/tanvir-hasan-tamal",
+  /** Public URL of the site, without a trailing slash. Set NEXT_PUBLIC_SITE_URL in Vercel. */
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
   ogImage: "/og-image.png",
   resume: "/Resume_of_Tanvir_Hasan_Tamal.pdf",
-  /**
-   * Contact form submissions are posted to the contact API (see contact-api/), which sends them
-   * through Gmail SMTP. The URL is read at build time from NEXT_PUBLIC_CONTACT_API_URL. When it is
-   * empty, the form shows its fallback message and no request is made.
-   */
+  /** Contact form submissions go to the route handler in src/app/api/contact (Gmail SMTP). */
   contactForm: {
-    endpoint: process.env.NEXT_PUBLIC_CONTACT_API_URL ?? "",
+    endpoint: "/api/contact",
   },
   locale: "en_US",
   keywords: [

@@ -1,16 +1,16 @@
 # Tanvir Hasan Tamal — Portfolio
 
 Personal portfolio of **Tanvir Hasan Tamal**, Full-Stack Software Engineer.
-Live at **[tanvirh103.github.io/tanvir-hasan-tamal](https://tanvirh103.github.io/tanvir-hasan-tamal/)**.
 
 ## Tech stack
 
-- [Next.js 16](https://nextjs.org) (App Router, static export) · React 19 · TypeScript (strict)
+- [Next.js 16](https://nextjs.org) (App Router, full-stack: pages + route handlers) · React 19 · TypeScript (strict)
 - [Tailwind CSS v4](https://tailwindcss.com) with CSS-variable design tokens
 - Light / dark theme (follows the OS by default, remembers the visitor's choice, no flash on load)
 - [simple-icons](https://simpleicons.org) logos served as a single cached SVG sprite
+- Contact form sent through Gmail SMTP (Nodemailer) from a server route handler
 - ESLint (Next.js core-web-vitals + TypeScript) and Prettier (with Tailwind class sorting)
-- Deployed to GitHub Pages via GitHub Actions
+- Deployed on Vercel; GitHub Actions runs the checks
 
 ## Getting started
 
@@ -18,18 +18,19 @@ Requires Node.js 20.9+ (see `.nvmrc`).
 
 ```bash
 npm install
+cp .env.example .env.local   # then fill in the Gmail values (see "Contact form")
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Production builds are served under the GitHub Pages
-base path `/tanvir-hasan-tamal`; override it with `NEXT_PUBLIC_BASE_PATH` (e.g. `""` for a custom domain).
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
 | Command             | Description                            |
 | ------------------- | -------------------------------------- |
 | `npm run dev`       | Start the development server           |
-| `npm run build`     | Build the static site into `out/`      |
+| `npm run build`     | Production build                       |
+| `npm start`         | Run the production build locally       |
 | `npm run typecheck` | Generate Next.js types and run `tsc`   |
 | `npm run lint`      | Lint with ESLint                       |
 | `npm run format`    | Format with Prettier                   |
@@ -40,8 +41,10 @@ base path `/tanvir-hasan-tamal`; override it with `NEXT_PUBLIC_BASE_PATH` (e.g. 
 ```
 src/
 ├── app/                # Routes, root layout, global styles, SEO (robots, sitemap, icons sprite)
+│   └── api/contact/    # Contact form route handler (Gmail SMTP)
 ├── assets/             # Optimized images imported by components
 ├── components/
+│   ├── contact/        # Contact form
 │   ├── icons/          # UI and brand SVG icons
 │   ├── layout/         # Header, Footer, ThemeToggle
 │   ├── sections/       # Page sections (Hero, About, Experience, …)
@@ -65,29 +68,40 @@ Replace `public/Resume_of_Tanvir_Hasan_Tamal.pdf` to update the downloadable res
 
 ## Contact form
 
-The `/contact` page posts messages to a small serverless endpoint in [`contact-api/`](contact-api/README.md),
-which sends them from your Gmail account over SMTP. The endpoint URL is read at build time from
-`NEXT_PUBLIC_CONTACT_API_URL`:
+The `/contact` page posts to `/api/contact`, a route handler that sends the message from your Gmail
+account to `CONTACT_TO` over SMTP, with the visitor's address as Reply-To. The Gmail credentials are
+read on the server only; they are never sent to the browser.
 
-- Locally, put it in a `.env.local` file (gitignored).
-- For the deployed site, add it as a repository **variable** (Settings → Secrets and variables → Actions → Variables)
-  with the same name. The workflow passes it to the build.
+Environment variables (`.env.local` locally, Vercel project settings in production):
 
-The Gmail address and App Password live only in the Vercel project for `contact-api/`, never in this repository.
-The form also has a honeypot field, a minimum fill time, and a 30-second cooldown between sends to deter spam.
+| Name                   | Value                                                                                          |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| `GMAIL_USER`           | the Gmail address that sends the mail                                                          |
+| `GMAIL_APP_PASSWORD`   | a Google App Password (2-Step Verification must be on)                                         |
+| `CONTACT_TO`           | where messages are delivered (defaults to `GMAIL_USER`)                                        |
+| `NEXT_PUBLIC_SITE_URL` | the public site URL, e.g. `https://your-project.vercel.app` (used for canonical links and SEO) |
+
+Create an App Password at <https://myaccount.google.com/apppasswords>.
+
+The form also has a honeypot field, a minimum fill time, a 30-second cooldown between sends, and
+rejects requests from other sites (cross-site form posts). Rate limiting is per server instance.
 
 ## Security
 
-- **Content Security Policy:** GitHub Pages cannot send headers, so `scripts/csp-hashes.mjs` writes a CSP `<meta>`
-  into every exported page after `next build`. Scripts are limited to this site plus SHA-256 hashes of each page's
-  own inline scripts, so `'unsafe-inline'` is not used for scripts. Build output must be checked in the browser console
-  after changes to inline scripts.
-- **Clickjacking:** `src/lib/framebust.ts` breaks out of foreign frames, since `frame-ancestors` cannot be set in a meta tag.
-- **Dependencies and actions:** Dependabot (`.github/dependabot.yml`) opens weekly update PRs for npm and GitHub Actions.
-  Actions are pinned to commit SHAs in the workflow.
-- Run `npm audit` before releases.
+- **Security headers** are set in [`next.config.ts`](next.config.ts): a Content Security Policy,
+  `X-Frame-Options: DENY` and `frame-ancestors 'none'` (clickjacking), HSTS, `nosniff`, a referrer policy,
+  and a permissions policy.
+- Scripts currently allow `'unsafe-inline'`, because Next.js inlines its hydration data. Moving to
+  nonces would require a Next.js proxy file that sets a nonce per request.
+- **Secrets** stay in environment variables. `.env*` files are gitignored.
+- **Dependencies and actions:** Dependabot (`.github/dependabot.yml`) opens weekly update PRs for npm and
+  GitHub Actions. Actions are pinned to commit SHAs. Run `npm audit` before releases.
 
-## Deployment
+## Deployment (Vercel)
 
-Pushing to `main` runs [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml), which type checks,
-lints, builds the static export (adding the CSP) and publishes `out/` to GitHub Pages.
+1. Import this repository in Vercel. The framework is detected as Next.js; no build settings need changing.
+2. Add the environment variables above under **Project → Settings → Environment Variables**
+   (`GMAIL_USER`, `GMAIL_APP_PASSWORD`, `CONTACT_TO`, `NEXT_PUBLIC_SITE_URL`).
+3. Every push to `main` deploys to production, and pull requests get preview deployments.
+4. [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs the type check, lint, format check and build on
+   every push and pull request.

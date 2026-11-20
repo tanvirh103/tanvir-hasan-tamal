@@ -11,7 +11,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description: `Get in touch with ${profile.name} — send a message about a project, role or collaboration.`,
-  alternates: { canonical: `${siteConfig.url}/contact/` },
+  alternates: { canonical: `${siteConfig.url}/contact` },
 };
 
 const contactDetails = [
