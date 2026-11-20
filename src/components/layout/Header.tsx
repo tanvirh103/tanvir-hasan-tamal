@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { DownloadIcon } from "@/components/icons";
 import { profile } from "@/data/profile";
-import { siteConfig, withBasePath } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -37,7 +37,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <ThemeToggle className="border border-border bg-surface" />
           <a
-            href={withBasePath(siteConfig.resume)}
+            href={siteConfig.resume}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-4 text-sm font-medium text-background transition-opacity hover:opacity-85"

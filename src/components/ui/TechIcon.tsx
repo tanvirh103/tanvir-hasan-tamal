@@ -1,7 +1,6 @@
 import type { Tech } from "@/types";
 
 import { cn } from "@/lib/cn";
-import { withBasePath } from "@/lib/site";
 
 /** Relative luminance (0–1) of a 6-digit hex colour. */
 function luminance(hex: string): number {
@@ -51,7 +50,7 @@ export function TechIcon({ tech, className }: TechIconProps) {
       className={cn(isDark && "text-foreground", className)}
       fill={isDark ? "currentColor" : `#${hex}`}
     >
-      <use href={withBasePath(`/icons.svg#${slug}`)} />
+      <use href={`/icons.svg#${slug}`} />
     </svg>
   );
 }
