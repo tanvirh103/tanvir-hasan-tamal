@@ -65,11 +65,29 @@ Replace `public/Resume_of_Tanvir_Hasan_Tamal.pdf` to update the downloadable res
 
 ## Contact form
 
-The `/contact` page sends messages through [Web3Forms](https://web3forms.com) to the inbox the
-access key was created for. To change the destination inbox, create a new key at web3forms.com and
-set `contactForm.accessKey` in [`src/lib/site.ts`](src/lib/site.ts). The key is public by design.
+The `/contact` page posts messages to a small serverless endpoint in [`contact-api/`](contact-api/README.md),
+which sends them from your Gmail account over SMTP. The endpoint URL is read at build time from
+`NEXT_PUBLIC_CONTACT_API_URL`:
+
+- Locally, put it in a `.env.local` file (gitignored).
+- For the deployed site, add it as a repository **variable** (Settings → Secrets and variables → Actions → Variables)
+  with the same name. The workflow passes it to the build.
+
+The Gmail address and App Password live only in the Vercel project for `contact-api/`, never in this repository.
+The form also has a honeypot field, a minimum fill time, and a 30-second cooldown between sends to deter spam.
+
+## Security
+
+- **Content Security Policy:** GitHub Pages cannot send headers, so `scripts/csp-hashes.mjs` writes a CSP `<meta>`
+  into every exported page after `next build`. Scripts are limited to this site plus SHA-256 hashes of each page's
+  own inline scripts, so `'unsafe-inline'` is not used for scripts. Build output must be checked in the browser console
+  after changes to inline scripts.
+- **Clickjacking:** `src/lib/framebust.ts` breaks out of foreign frames, since `frame-ancestors` cannot be set in a meta tag.
+- **Dependencies and actions:** Dependabot (`.github/dependabot.yml`) opens weekly update PRs for npm and GitHub Actions.
+  Actions are pinned to commit SHAs in the workflow.
+- Run `npm audit` before releases.
 
 ## Deployment
 
 Pushing to `main` runs [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml), which type checks,
-lints, builds the static export and publishes `out/` to GitHub Pages.
+lints, builds the static export (adding the CSP) and publishes `out/` to GitHub Pages.

@@ -15,12 +15,12 @@ export const siteConfig = {
   ogImage: "/og-image.png",
   resume: "/Resume_of_Tanvir_Hasan_Tamal.pdf",
   /**
-   * Contact form submissions are delivered by Web3Forms (https://web3forms.com) to the inbox
-   * the access key was created for. The key is public by design and safe to commit.
+   * Contact form submissions are posted to the contact API (see contact-api/), which sends them
+   * through Gmail SMTP. The URL is read at build time from NEXT_PUBLIC_CONTACT_API_URL. When it is
+   * empty, the form shows its fallback message and no request is made.
    */
   contactForm: {
-    endpoint: "https://api.web3forms.com/submit",
-    accessKey: "",
+    endpoint: process.env.NEXT_PUBLIC_CONTACT_API_URL ?? "",
   },
   locale: "en_US",
   keywords: [
