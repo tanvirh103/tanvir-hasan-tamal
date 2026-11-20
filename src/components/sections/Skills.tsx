@@ -5,7 +5,6 @@ import { TechIcon } from "@/components/ui/TechIcon";
 import { skillGroups } from "@/data/skills";
 import type { Tech } from "@/types";
 
-
 function brandStyle(tech: Tech): CSSProperties | undefined {
   const hex = tech.icon?.hex;
   if (!hex) return undefined;

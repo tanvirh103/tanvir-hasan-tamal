@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
 import { ArrowRightIcon, MailIcon } from "@/components/icons";
@@ -14,6 +14,11 @@ type FieldErrors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "submitting" | "success" | "error";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+/** Humans take longer than this to fill the form; bots usually submit almost instantly. */
+const MIN_FILL_MS = 3000;
+/** Minimum gap between two submissions from the same page view. */
+const SUBMIT_COOLDOWN_MS = 30_000;
+const MAX_BODY_CHARS = 5000;
 
 function validate(values: Record<FieldName, string>): FieldErrors {
   const errors: FieldErrors = {};
@@ -22,6 +27,8 @@ function validate(values: Record<FieldName, string>): FieldErrors {
     errors.email = "Please enter a valid email address.";
   if (values.message.trim().length < 10) {
     errors.message = "Please write a message of at least 10 characters.";
+  } else if (values.message.length > MAX_BODY_CHARS) {
+    errors.message = `Please keep your message under ${MAX_BODY_CHARS} characters.`;
   }
   return errors;
 }
@@ -72,17 +79,30 @@ function Field({ name, label, error, optional, children }: FieldProps) {
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
+  // Set once when the form mounts (timing check) and after each send attempt (cooldown).
+  const mountedAt = useRef(0);
+  const lastSubmitAt = useRef(0);
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
+    const now = Date.now();
 
-    // Bots fill the hidden honeypot field; silently pretend success.
-    if (data.get("_honey")) {
+    // Bots fill the hidden honeypot field or submit the form instantly; silently pretend success.
+    if (data.get("_honey") || now - mountedAt.current < MIN_FILL_MS) {
       setStatus("success");
       return;
     }
+
+    if (lastSubmitAt.current && now - lastSubmitAt.current < SUBMIT_COOLDOWN_MS) {
+      setStatus("error");
+      return;
+    }
+    lastSubmitAt.current = now;
 
     const values = {
       name: String(data.get("name") ?? ""),
@@ -101,23 +121,17 @@ export function ContactForm() {
 
     setStatus("submitting");
     try {
-      const { endpoint, accessKey } = siteConfig.contactForm;
-      if (!accessKey) throw new Error("Web3Forms access key is not configured");
+      const { endpoint } = siteConfig.contactForm;
+      if (!endpoint) throw new Error("Contact API URL is not configured");
 
-      const name = values.name.trim();
-      const topic = values.subject.trim();
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          access_key: accessKey,
-          // Email subject line; the visitor's email is used as the reply-to address.
-          subject: topic ? `Portfolio: ${topic} — from ${name}` : `Portfolio message from ${name}`,
-          from_name: `${siteConfig.name} Portfolio`,
-          name,
+          name: values.name.trim(),
           email: values.email.trim(),
+          subject: values.subject.trim(),
           message: values.message.trim(),
-          botcheck: false,
         }),
       });
       const result: { success?: boolean; message?: string } = await response

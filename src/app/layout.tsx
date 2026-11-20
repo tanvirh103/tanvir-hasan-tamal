@@ -5,7 +5,7 @@ import { InteractiveEffects } from "@/components/effects/InteractiveEffects";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
-import { basePath, siteConfig, withBasePath } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 import { themeInitScript } from "@/lib/theme";
 
 import "./globals.css";
@@ -23,26 +23,6 @@ const geistMono = Geist_Mono({
 });
 
 const ogImageUrl = `${siteConfig.url}${siteConfig.ogImage}`;
-
-/**
- * GitHub Pages can't send security headers, so the policy is delivered as a <meta> tag.
- * Inline scripts stay allowed because a static export inlines Next.js's hydration data and
- * the theme script, but external scripts, connections and form posts are limited to this
- * site and the contact form service. Skipped in development, where HMR needs eval and WebSockets.
- */
-const contactOrigin = new URL(siteConfig.contactForm.endpoint).origin;
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
-  "font-src 'self'",
-  `connect-src 'self' ${contactOrigin}`,
-  `form-action 'self' ${contactOrigin}`,
-  "object-src 'none'",
-  "base-uri 'self'",
-  "upgrade-insecure-requests",
-].join("; ");
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteConfig.url}/`),
@@ -86,15 +66,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     // The theme script mutates the class before hydration, hence the warning suppression.
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${geist.variable} ${geistMono.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head>
-        {process.env.NODE_ENV === "production" && (
-          <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
-        )}
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {/* Next.js omits favicon.ico when a basePath is set; Safari needs it (no SVG favicons). */}
-        {basePath && <link rel="icon" href={withBasePath("/favicon.ico")} sizes="48x48" />}
       </head>
       <body>
         <a

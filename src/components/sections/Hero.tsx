@@ -9,7 +9,7 @@ import { SocialLinks } from "@/components/ui/SocialLinks";
 import { TypingText } from "@/components/ui/TypingText";
 import { profile, stats } from "@/data/profile";
 import { coreStack } from "@/data/skills";
-import { siteConfig, withBasePath } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 
 const nameParts = profile.name.split(" ");
 const lastName = nameParts.pop() ?? "";
@@ -129,7 +129,7 @@ export function Hero() {
                 View my work
                 <ArrowRightIcon className="transition-transform group-hover/button:translate-x-1" />
               </ButtonLink>
-              <ButtonLink href={withBasePath(siteConfig.resume)} variant="secondary" external>
+              <ButtonLink href={siteConfig.resume} variant="secondary" external>
                 <DownloadIcon />
                 Download resume
               </ButtonLink>

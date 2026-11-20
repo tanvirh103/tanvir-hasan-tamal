@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { CloseIcon, DownloadIcon, MenuIcon } from "@/components/icons";
 import { navItems, profile } from "@/data/profile";
 import { cn } from "@/lib/cn";
-import { siteConfig, withBasePath } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 import type { NavItem } from "@/types";
 
 import { ThemeToggle } from "./ThemeToggle";
@@ -122,7 +122,7 @@ export function Header() {
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
           <a
-            href={withBasePath(siteConfig.resume)}
+            href={siteConfig.resume}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden h-10 btn-neon items-center gap-2 rounded-xl px-4 text-sm font-semibold sm:inline-flex"
@@ -168,7 +168,7 @@ export function Header() {
           </ul>
         </nav>
         <a
-          href={withBasePath(siteConfig.resume)}
+          href={siteConfig.resume}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-2 inline-flex h-12 w-full btn-neon items-center justify-center gap-2 rounded-xl text-sm font-semibold"
