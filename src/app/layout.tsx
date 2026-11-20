@@ -4,6 +4,7 @@ import { Cal_Sans, Inter } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { basePath, siteConfig, withBasePath } from "@/lib/site";
+import { frameBustScript } from "@/lib/framebust";
 import { themeInitScript } from "@/lib/theme";
 
 import "./globals.css";
@@ -24,26 +25,6 @@ const calSans = Cal_Sans({
 });
 
 const ogImageUrl = `${siteConfig.url}${siteConfig.ogImage}`;
-
-/**
- * GitHub Pages can't send security headers, so the policy is delivered as a <meta> tag.
- * Inline scripts stay allowed because a static export inlines Next.js's hydration data and
- * the theme script, but external scripts, connections and form posts are limited to this
- * site and the contact form service. Skipped in development, where HMR needs eval and WebSockets.
- */
-const contactOrigin = new URL(siteConfig.contactForm.endpoint).origin;
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
-  "font-src 'self'",
-  `connect-src 'self' ${contactOrigin}`,
-  `form-action 'self' ${contactOrigin}`,
-  "object-src 'none'",
-  "base-uri 'self'",
-  "upgrade-insecure-requests",
-].join("; ");
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteConfig.url}/`),
@@ -87,13 +68,17 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     // The theme script mutates the class before hydration, hence the warning suppression.
-    <html lang="en" className={`${inter.variable} ${calSans.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${calSans.variable}`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head>
-        {process.env.NODE_ENV === "production" && (
-          <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy} />
-        )}
+        {/* The Content-Security-Policy <meta> is added to the export by scripts/csp-hashes.mjs. */}
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: frameBustScript }} />
         {/* Next.js omits favicon.ico when a basePath is set; Safari needs it (no SVG favicons). */}
         {basePath && <link rel="icon" href={withBasePath("/favicon.ico")} sizes="48x48" />}
       </head>

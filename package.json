@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/csp-hashes.mjs",
     "start": "npx serve@14.2.6 out",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
