@@ -12,18 +12,12 @@ function resolveSiteUrl(...candidates: (string | undefined)[]): string {
   }
   return "http://localhost:3000";
 }
-
 export const siteConfig = {
   name: "Tanvir Hasan Tamal",
   shortName: "Tanvir",
   title: "Tanvir Hasan Tamal – Full-Stack Software Engineer",
   description:
     "Full-stack software engineer building scalable, multi-tenant SaaS platforms with Next.js, NestJS, TypeScript, MongoDB and PostgreSQL. Explore my experience, projects and skills.",
-  /**
-   * Public URL of the site, without a trailing slash. Used for canonical links and SEO.
-   * Order: NEXT_PUBLIC_SITE_URL, then Vercel's production domain, then localhost. An empty value
-   * or a missing protocol is handled so the build never produces an invalid URL.
-   */
   url: resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL, process.env.VERCEL_PROJECT_PRODUCTION_URL),
   ogImage: "/og-image.png",
   resume: "/Resume_of_Tanvir_Hasan_Tamal.pdf",
