@@ -5,7 +5,6 @@ import type { Transporter } from "nodemailer";
 // never reaches the browser. Required environment variables:
 //   GMAIL_USER          the Gmail address that sends the mail
 //   GMAIL_APP_PASSWORD  a Google App Password for that account (2-Step Verification must be on)
-// Optional: CONTACT_TO (where messages are delivered; defaults to GMAIL_USER).
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
