@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
+import { ContactDetailList } from "@/components/contact/ContactDetails";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { MailIcon, MapPinIcon, PhoneIcon } from "@/components/icons";
+import { RiseText } from "@/components/motion/RiseText";
+import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { profile } from "@/data/profile";
-import { cn } from "@/lib/cn";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,80 +15,80 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteConfig.url}/contact` },
 };
 
-const contactDetails = [
-  { icon: MailIcon, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
-  {
-    icon: PhoneIcon,
-    label: "Phone / WhatsApp",
-    value: profile.phone,
-    href: `tel:${profile.phone}`,
-  },
-  { icon: MapPinIcon, label: "Location", value: `${profile.location} · Remote` },
-];
-
 export default function ContactPage() {
   return (
     <section
-      id="top"
       aria-labelledby="contact-page-heading"
-      className="relative isolate overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28"
+      className="relative isolate overflow-hidden pt-32 pb-24 sm:pt-40 sm:pb-32"
     >
+      {/* Decorative backdrop. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-1/2 h-[36rem] w-[min(64rem,140vw)] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]" />
+        <div className="absolute inset-x-0 top-0 h-[40rem] bg-grid mask-fade-b" />
+        <div className="absolute -top-40 right-[-10rem] size-[40rem] bg-glow" />
+        <div className="absolute top-[30rem] -left-48 size-[34rem] bg-glow-2" />
       </div>
 
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <div className="animate-fade-up">
-            <p className="mb-3 font-mono text-xs font-medium tracking-[0.2em] text-accent uppercase">
-              Contact
-            </p>
-            <h1
-              id="contact-page-heading"
-              className="font-display text-4xl tracking-tight text-balance sm:text-5xl lg:text-6xl"
-            >
-              Let&apos;s build something <span className="text-gradient">great together</span>
-            </h1>
-            <p className="mt-5 max-w-lg text-base text-pretty text-muted sm:text-lg">
-              Have a project, a role or just want to say hi? Send me a message and it will land
-              straight in my inbox — I&apos;ll reply as soon as I can.
-            </p>
+        <header className="max-w-4xl">
+          <p className="mb-6 inline-flex animate-fade-up items-center gap-2.5 label-mono text-muted">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+            Contact
+          </p>
+          <h1
+            id="contact-page-heading"
+            className="text-5xl leading-[0.98] font-semibold tracking-tighter sm:text-7xl lg:text-8xl"
+          >
+            <RiseText
+              lines={[
+                "Let's build something",
+                <em key="together" className="accent-serif text-accent">
+                  together
+                </em>,
+              ]}
+              delay={80}
+              stagger={110}
+            />
+          </h1>
+          <p
+            className="mt-7 max-w-xl animate-fade-up text-base leading-relaxed text-muted sm:text-lg"
+            style={{ animationDelay: "240ms" }}
+          >
+            Have a project, a role or just want to say hi? Send a message and it lands straight in
+            my inbox.
+          </p>
+        </header>
 
-            <ul className="mt-10 flex flex-col gap-3">
-              {contactDetails.map(({ icon: Icon, label, value, href }) => {
-                const content = (
-                  <>
-                    <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-                      <Icon className="size-5" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-xs text-muted">{label}</span>
-                      <span className="block truncate text-sm font-medium">{value}</span>
-                    </span>
-                  </>
-                );
-                const className =
-                  "flex items-center gap-3 rounded-2xl border border-border bg-surface p-4 transition-colors";
-                return (
-                  <li key={label}>
-                    {href ? (
-                      <a href={href} className={cn(className, "hover:border-accent/50")}>
-                        {content}
-                      </a>
-                    ) : (
-                      <div className={className}>{content}</div>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+        <div className="mt-14 grid gap-8 sm:mt-20 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
+          <aside aria-label="Contact details" className="flex flex-col gap-4">
+            <ContactDetailList />
 
-            <SocialLinks className="mt-8" />
-          </div>
+            <Card className="relative overflow-hidden p-6">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-16 -right-16 size-48 bg-glow"
+              />
+              <p className="flex items-center gap-2.5 label-mono text-muted">
+                <span aria-hidden="true" className="size-2 rounded-full bg-accent" />
+                Role
+              </p>
+              <p className="mt-4 text-2xl font-semibold tracking-tight">{profile.availability}</p>
+              <p className="mt-2 text-sm leading-relaxed text-pretty text-muted">
+                Messages from this form are delivered straight to my inbox, and my reply goes to the
+                email address you provide.
+              </p>
+            </Card>
 
-          <div className="animate-fade-up rounded-3xl border border-border bg-surface p-5 shadow-sm [animation-delay:120ms] sm:p-8">
-            <h2 className="font-display text-2xl tracking-tight">Send a message</h2>
-            <p className="mt-1 mb-6 text-sm text-muted">
+            <div className="pt-2">
+              <p className="mb-3 label-mono text-subtle">Elsewhere</p>
+              <SocialLinks />
+            </div>
+          </aside>
+
+          <div className="border-beam rounded-3xl p-5 shadow-float glass sm:p-8 lg:p-10">
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              Send a <em className="accent-serif text-accent">message</em>
+            </h2>
+            <p className="mt-2 mb-8 text-sm text-muted">
               All fields except the subject are required.
             </p>
             <ContactForm />

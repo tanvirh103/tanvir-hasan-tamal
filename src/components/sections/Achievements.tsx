@@ -1,83 +1,108 @@
 import { HeartHandshakeIcon, TrophyIcon } from "@/components/icons";
-import { Badge } from "@/components/ui/Badge";
+import { Tilt } from "@/components/motion/Tilt";
 import { Section } from "@/components/ui/Section";
 import { achievements, volunteering } from "@/data/achievements";
-
-// Years span from the oldest to the newest activity, e.g. "2013 — 2022".
-const volunteeringYears = volunteering.flatMap(({ date }) => date.match(/\d{4}/g) ?? []).sort();
-const volunteeringRange = [...new Set([volunteeringYears[0], volunteeringYears.at(-1)])].join(
-  " — ",
-);
+import { cn } from "@/lib/cn";
 
 export function Achievements() {
   return (
     <Section
       id="achievements"
+      index="06"
       eyebrow="Recognition"
-      title="Achievements & leadership"
+      title={
+        <>
+          Achievements &amp; <em className="accent-serif">leadership</em>
+        </>
+      }
       description="Competitions won along the way, and years of leadership and service through Bangladesh Scouts."
+      className="overflow-clip"
     >
-      <ul className="grid gap-4 md:grid-cols-3">
-        {achievements.map(({ title, year, description }) => (
-          <li
-            key={title}
-            className="reveal flex flex-col rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/40 sm:p-6"
-          >
-            <div className="flex items-center justify-between">
-              <span className="inline-flex size-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500">
-                <TrophyIcon className="size-5" />
-              </span>
-              <span className="font-mono text-sm text-muted">{year}</span>
-            </div>
-            <h3 className="mt-4 font-semibold">{title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted">{description}</p>
-          </li>
-        ))}
+      <ul className="grid gap-5 md:grid-cols-3 lg:gap-6">
+        {achievements.map(({ title, year, description }, index) => {
+          const featured = index === 0;
+          return (
+            <li key={title} className="reveal-scale relative">
+              {featured && (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-6 rounded-[2.5rem] opacity-80 blur-2xl bg-glow"
+                />
+              )}
+              <Tilt
+                as="article"
+                max={6}
+                className={cn(
+                  "spotlight flex h-full min-h-[24rem] flex-col card p-6 sm:min-h-[28rem] sm:p-8",
+                  featured && "border-beam border-accent/30 shadow-float",
+                )}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span
+                    className={cn(
+                      "inline-flex size-12 items-center justify-center rounded-2xl",
+                      featured
+                        ? "bg-accent text-accent-foreground shadow-float"
+                        : "border border-border bg-accent-soft text-accent",
+                    )}
+                  >
+                    <TrophyIcon className="size-5" />
+                  </span>
+                  <span className="label-mono text-subtle">
+                    <span className="sr-only">Year: </span>
+                    {year}
+                  </span>
+                </div>
+
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "mt-8 block font-display text-7xl leading-[0.85] font-semibold tracking-tighter text-stroke select-none md:text-6xl lg:text-8xl",
+                    featured && "[-webkit-text-stroke-color:var(--accent)]",
+                  )}
+                >
+                  {year}
+                </span>
+
+                <div className="mt-auto pt-10">
+                  <h3 className="text-lg leading-snug font-semibold tracking-tight text-balance sm:text-xl">
+                    {title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">{description}</p>
+                </div>
+              </Tilt>
+            </li>
+          );
+        })}
       </ul>
 
-      <div className="mt-16 sm:mt-20">
-        <header className="reveal mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex items-center gap-4">
-            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
-              <HeartHandshakeIcon className="size-6" />
-            </span>
-            <div>
-              <h3 className="font-display text-2xl tracking-tight sm:text-3xl">
-                Volunteer experience
-              </h3>
-              <p className="mt-1 text-sm text-muted sm:text-base">
-                Service and leadership beyond the keyboard.
-              </p>
-            </div>
-          </div>
-          <Badge className="self-start sm:self-auto">
-            {volunteering.length} activities · {volunteeringRange}
-          </Badge>
-        </header>
+      <div className="reveal mt-20 grid gap-10 sm:mt-28 lg:grid-cols-[18rem_1fr] lg:gap-16">
+        <div>
+          <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-border bg-accent-soft text-accent">
+            <HeartHandshakeIcon className="size-5" />
+          </span>
+          <h3 className="mt-6 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
+            Volunteering &amp; <em className="accent-serif">leadership</em>
+          </h3>
+          <p className="mt-3 label-mono text-subtle">{volunteering.length} engagements</p>
+        </div>
 
-        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {volunteering.map(({ title, organization, date }, index) => (
+        <ul className="grid border-t border-border sm:grid-cols-2 sm:gap-x-10">
+          {volunteering.map(({ title, organization, date }) => (
             <li
               key={title}
-              className="reveal group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/40 sm:p-6"
+              className="group grid grid-cols-[6.5rem_1fr] gap-4 border-b border-border py-5"
             >
-              <span
-                aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-accent/0 via-accent/60 to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-              />
-              <div className="flex items-center justify-between gap-3">
-                <span className="font-mono text-sm text-muted">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <Badge>{date}</Badge>
+              <span className="pt-1 font-mono text-xs text-subtle transition-colors group-hover:text-accent">
+                {date}
+              </span>
+              <div className="min-w-0">
+                <p className="leading-snug font-medium">{title}</p>
+                {organization && <p className="mt-1 text-sm text-muted">{organization}</p>}
               </div>
-              <h4 className="mt-4 flex-1 leading-snug font-semibold">{title}</h4>
-              {organization && (
-                <p className="mt-3 text-sm font-medium text-accent">{organization}</p>
-              )}
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </Section>
   );

@@ -1,78 +1,13 @@
-import { ArrowUpRightIcon, GithubIcon, TrophyIcon } from "@/components/icons";
-import { Badge } from "@/components/ui/Badge";
-import { ButtonLink } from "@/components/ui/Button";
+import { ArrowUpRightIcon } from "@/components/icons";
 import { Section } from "@/components/ui/Section";
-import { projects } from "@/data/projects";
 import { socialLinks } from "@/data/profile";
-import { cn } from "@/lib/cn";
-import type { Project } from "@/types";
+import { projects } from "@/data/projects";
+
+import { FeaturedPanel } from "./projects/FeaturedPanel";
+import { ProjectRow } from "./projects/ProjectRow";
+import { projectsCss } from "./projects/styles";
 
 const githubProfile = socialLinks.find((link) => link.platform === "github")?.href;
-
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const { title, summary, stack, links, featured, badge } = project;
-
-  return (
-    <article
-      className={cn(
-        "reveal group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent/40 sm:p-7",
-        featured && "lg:p-8",
-      )}
-    >
-      {featured && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        />
-      )}
-
-      <div className="flex min-h-7 flex-wrap items-center justify-between gap-2">
-        <span className="font-mono text-sm text-muted">{String(index + 1).padStart(2, "0")}</span>
-        {badge && (
-          <Badge variant="accent">
-            <TrophyIcon className="size-3.5" />
-            {badge}
-          </Badge>
-        )}
-      </div>
-
-      <h3
-        className={cn(
-          "mt-4 font-display tracking-tight",
-          featured ? "text-2xl sm:text-3xl" : "text-xl",
-        )}
-      >
-        {title}
-      </h3>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted sm:text-base">{summary}</p>
-
-      <ul aria-label="Tech stack" className="mt-5 flex flex-wrap gap-2">
-        {stack.map((tech) => (
-          <li key={tech}>
-            <Badge>{tech}</Badge>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-5">
-        {links.map(({ label, href }) => (
-          <a
-            key={href}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-accent"
-          >
-            <GithubIcon className="size-4" />
-            {label}
-            <ArrowUpRightIcon className="size-3.5" />
-            <span className="sr-only">for {title} (opens in a new tab)</span>
-          </a>
-        ))}
-      </div>
-    </article>
-  );
-}
 
 export function Projects() {
   const featured = projects.filter((project) => project.featured);
@@ -81,33 +16,64 @@ export function Projects() {
   return (
     <Section
       id="projects"
+      index="04"
       eyebrow="Selected work"
-      title="Projects I'm proud of"
-      description="From award-winning blockchain research to full-stack web platforms."
+      title={
+        <>
+          Things I&apos;ve <em className="accent-serif">built</em>
+        </>
+      }
+      description="From an award-winning Layer-1 blockchain to full-stack web platforms, a selection of personal and team projects."
+      className="overflow-x-clip"
+      aside={
+        githubProfile && (
+          <a
+            href={githubProfile}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/link inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-accent"
+          >
+            All projects on GitHub
+            <ArrowUpRightIcon
+              aria-hidden="true"
+              className="size-4 transition-transform duration-300 ease-out-expo group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+            />
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+        )
+      }
     >
-      <ul className="grid gap-4 lg:grid-cols-2">
+      <style href="projects-section" precedence="medium">
+        {projectsCss}
+      </style>
+
+      {/* Featured projects: sticky panels that stack over each other on large screens. */}
+      <ol aria-label="Featured projects" className="pj-stack flex flex-col gap-6 lg:gap-[6vh]">
         {featured.map((project, index) => (
-          <li key={project.title}>
-            <ProjectCard project={project} index={index} />
-          </li>
+          <FeaturedPanel
+            key={project.title}
+            project={project}
+            index={index}
+            count={featured.length}
+          />
         ))}
-      </ul>
+      </ol>
 
-      <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {others.map((project, index) => (
-          <li key={project.title}>
-            <ProjectCard project={project} index={featured.length + index} />
-          </li>
-        ))}
-      </ul>
-
-      {githubProfile && (
-        <div className="reveal mt-10 flex justify-center">
-          <ButtonLink href={githubProfile} variant="secondary" external>
-            <GithubIcon />
-            More on GitHub
-            <ArrowUpRightIcon />
-          </ButtonLink>
+      {others.length > 0 && (
+        <div className="mt-24 sm:mt-32">
+          <p className="mb-8 flex items-center gap-4 label-mono text-muted md:mb-0 md:border-b md:border-border md:pb-6">
+            More projects
+            <span aria-hidden="true" className="h-px flex-1 bg-border md:hidden" />
+          </p>
+          <ul aria-label="More projects" className="grid gap-4 md:gap-0">
+            {others.map((project, index) => (
+              <ProjectRow
+                key={project.title}
+                project={project}
+                number={String(featured.length + index + 1).padStart(2, "0")}
+              />
+            ))}
+          </ul>
         </div>
       )}
     </Section>

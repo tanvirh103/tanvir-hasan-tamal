@@ -8,7 +8,7 @@ export const achievements: Achievement[] = [
       "First place for delivering a decentralized Layer-1 blockchain with the DCLScan explorer for real-time network monitoring.",
   },
   {
-    title: "Runner-up — Jarvis 4.0 Intra ACC Carnival",
+    title: "Runner-up — Jarvis 4.0 App Showcasing",
     year: "2023",
     description:
       "Idea Prototyping & App Showcasing (Senior Category) with an AR-based virtual try-on prototype to enhance e-commerce UX.",

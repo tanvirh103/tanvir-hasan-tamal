@@ -16,7 +16,7 @@ export function SocialLinks({ className, itemClassName }: SocialLinksProps) {
           <li key={platform}>
             <a
               href={href}
-              aria-label={label}
+              aria-label={isExternal ? `${label} (opens in a new tab)` : label}
               title={label}
               className={cn(
                 "inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:border-accent hover:text-accent",

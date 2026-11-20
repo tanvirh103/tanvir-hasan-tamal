@@ -11,7 +11,11 @@ export function ThemeToggle({ className }: { className?: string }) {
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = (event: MediaQueryListEvent) => {
-      if (localStorage.getItem(THEME_STORAGE_KEY)) return;
+      try {
+        if (localStorage.getItem(THEME_STORAGE_KEY)) return;
+      } catch {
+        // Storage unavailable: keep following the OS.
+      }
       applyTheme(event.matches ? "dark" : "light");
     };
     media.addEventListener("change", onChange);
@@ -28,20 +32,29 @@ export function ThemeToggle({ className }: { className?: string }) {
     }
   };
 
-  // Icons are swapped with CSS, so server and client markup always match.
+  // Icons are swapped with CSS, so server and client markup always match (no flash or mismatch).
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-label="Toggle dark mode"
-      title="Toggle dark mode"
+      title="Switch theme"
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-muted transition-colors hover:border-accent hover:text-accent",
+        "group inline-flex size-10 shrink-0 items-center justify-center rounded-full text-muted transition-colors duration-200 hover:bg-surface-muted hover:text-foreground focus-visible:text-foreground",
         className,
       )}
     >
-      <SunIcon className="hidden size-[1.125rem] dark:block" />
-      <MoonIcon className="size-[1.125rem] dark:hidden" />
+      {/* Decorative hover flourish: the sun turns, the moon tilts (transform only). */}
+      <SunIcon
+        aria-hidden="true"
+        className="hidden size-[1.125rem] transition-transform duration-700 ease-out-expo group-hover:rotate-90 dark:block"
+      />
+      <MoonIcon
+        aria-hidden="true"
+        className="size-[1.125rem] transition-transform duration-500 ease-out-expo group-hover:-rotate-12 dark:hidden"
+      />
+      {/* The accessible name states the action; swapped with CSS like the icons (no hydration risk). */}
+      <span className="sr-only dark:hidden">Switch to dark theme</span>
+      <span className="sr-only hidden dark:inline">Switch to light theme</span>
     </button>
   );
 }
