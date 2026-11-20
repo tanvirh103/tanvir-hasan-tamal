@@ -1,11 +1,30 @@
+/** Returns a valid absolute origin such as https://example.com, never an empty or invalid value. */
+function resolveSiteUrl(...candidates: (string | undefined)[]): string {
+  for (const candidate of candidates) {
+    const value = candidate?.trim().replace(/\/+$/, "");
+    if (!value) continue;
+    const absolute = /^https?:\/\//.test(value) ? value : `https://${value}`;
+    try {
+      return new URL(absolute).origin;
+    } catch {
+      // Ignore malformed values and try the next candidate.
+    }
+  }
+  return "http://localhost:3000";
+}
+
 export const siteConfig = {
   name: "Tanvir Hasan Tamal",
   shortName: "Tanvir",
   title: "Tanvir Hasan Tamal – Full-Stack Software Engineer",
   description:
     "Full-stack software engineer building scalable, multi-tenant SaaS platforms with Next.js, NestJS, TypeScript, MongoDB and PostgreSQL. Explore my experience, projects and skills.",
-  /** Public URL of the site, without a trailing slash. Set NEXT_PUBLIC_SITE_URL in Vercel. */
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
+  /**
+   * Public URL of the site, without a trailing slash. Used for canonical links and SEO.
+   * Order: NEXT_PUBLIC_SITE_URL, then Vercel's production domain, then localhost. An empty value
+   * or a missing protocol is handled so the build never produces an invalid URL.
+   */
+  url: resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL, process.env.VERCEL_PROJECT_PRODUCTION_URL),
   ogImage: "/og-image.png",
   resume: "/Resume_of_Tanvir_Hasan_Tamal.pdf",
   /** Contact form submissions go to the route handler in src/app/api/contact (Gmail SMTP). */
