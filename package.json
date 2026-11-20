@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve@14.2.6 out",
+    "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "next typegen && tsc --noEmit",
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "next": "^16.4.6",
+    "nodemailer": "^10.6.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "simple-icons": "^16.38.0"
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.5",
     "@types/node": "^26.6.6",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "eslint": "^10.15.0",

@@ -35,7 +35,9 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col-reverse items-start gap-4 border-t border-border pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {profile.name}.</p>
+          <p>
+            © {year} {profile.name}.
+          </p>
           <a
             href="#top"
             className="inline-flex items-center gap-2 font-medium transition-colors hover:text-accent"
